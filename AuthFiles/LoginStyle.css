@@ -1,0 +1,106 @@
+body{
+    background: linear-gradient(to right, #FF5E00 40%, #ffffff);
+     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+     margin: 0%;
+     padding: 0%; 
+     height: 100vh;
+}
+.icon{
+    width: auto; 
+    height: 350px;
+    margin-left: 100px;
+}
+.WelcomeBack{
+    color: white;
+    font-size: 100px;
+    margin-left: 100px;
+    font-weight: bold;
+}
+.main{
+    display: flex;
+}
+.Login{
+    position: relative;
+    display: inline-block;
+}
+.Login h1{
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white; 
+    font-size: 80px; 
+    font-weight: bold;
+}
+.email{
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white; 
+    font-weight: bold;
+    width: 400px;
+    height: 100px;
+    border-radius: 30px;
+    border-color: white;
+    border: none;
+    outline: none;
+    font-size: 20px;
+    color: black; 
+}
+.password{
+        position: absolute;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white; 
+        font-weight: bold;
+        width: 400px;
+        height: 100px;
+        border-radius: 30px;
+        border-color: white;
+        border: none;
+        outline: none;
+        font-size: 20px;
+        color: black; 
+}
+.password::placeholder , .email::placeholder{
+    padding-left: 30px;
+    font-size: 35px;
+}
+.butt{
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #FF5E00; 
+    font-weight: bold;
+    width: 400px;
+    height: 80px;
+    border-radius: 30px;
+    border-color: white;
+    border: none;
+    outline: none;
+    font-size: 35px;    
+    transition: top .3s;
+    cursor: pointer;
+  }
+  .butt:hover {
+    top:69% ;
+  }
+.Login a{
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white; 
+    font-weight: bold;
+    border-radius: 30px;
+    border-color: white;
+    border: none;
+    outline: none;
+    font-size: 20px;
+    text-decoration-line: none;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+
+}
