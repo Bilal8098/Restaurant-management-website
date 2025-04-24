@@ -1,0 +1,229 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom right, #ff8800, #fff8e1); /* تدرج برتقالي ناعم */
+    background-attachment: fixed;
+  }
+  
+  .container {
+    padding: 10px 10px;
+    min-height: 100vh;
+  }
+  
+  .header {
+    text-align: center;
+  }
+  
+  .header-icon {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    margin-top: 10px;
+    color: #ffffff;
+  }
+  
+  .tables {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 240px;
+    grid-template-rows: repeat(2, auto);
+    gap: 20px;
+    overflow-x: auto;
+    padding: 20px 0;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .tables::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .tables::-webkit-scrollbar-thumb {
+    background: #ff8800;
+    border-radius: 4px;
+    
+  }
+  
+  .tables::-webkit-scrollbar-thumb:hover {
+    background:  #ff8800;
+    
+  }
+  
+  .table-card,
+  .add-table {
+    background: linear-gradient(145deg, #ffffff, #f2f2f2);
+    border-radius: 18px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    min-height: 0px;
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    scroll-snap-align: start;
+    animation: fadeInUp 0.7s ease forwards;
+    opacity: 0;
+  }
+  
+  
+
+  
+  .table-card,
+  .add-table {
+    background: linear-gradient(145deg, #ffffff, #f2f2f2);
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    min-height: 230px;
+    animation: fadeInUp 0.7s ease forwards;
+    opacity: 0;
+  }
+  
+  .table-card:hover,
+  .add-table:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  .table-card img,
+  .add-table img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    border-radius: 50%; 
+    object-fit: cover; 
+    border: 3px solid #ff6a00;
+    transition: transform 0.3s ease;
+  }
+  
+  .table-card:hover img,
+  .add-table:hover img {
+    transform: scale(1.1);
+  }
+  
+  .table-name {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #222;
+    background: linear-gradient(to right, #ff7a00, #ff4500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.3s ease;
+  }
+  
+
+  @keyframes fadeInUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+.view-btn {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease, transform 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.view-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: skewX(-25deg);
+  transition: left 0.5s ease;
+}
+
+.view-btn:hover::before {
+  left: 125%;
+}
+
+.view-btn:hover {
+  background: linear-gradient(135deg, #fb8c00, #ef6c00);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+  
+.add-table-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 24px;
+    border-radius: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 220px;
+    width: 180px;
+    text-align: center;
+    position: relative;
+  }
+  
+  .add-table-button:hover {
+    transform: translateY(-6px) scale(1.03);
+  }
+  
+  .add-table-button .plus-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    color: white;
+    font-size: 2.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-table-button:hover .plus-icon {
+    background: #fb8c00;
+  }
+  
+  .add-table-button span {
+    margin-top: 16px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ff6a00;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: linear-gradient(to right, #ff7a00, #ff4500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: transparet;
+  }
+  
+
+  
