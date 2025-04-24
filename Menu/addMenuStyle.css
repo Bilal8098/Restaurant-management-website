@@ -1,0 +1,69 @@
+body{
+    background: linear-gradient(to right, #FF5E00 60%, #ffffff);
+     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+     margin: 0%;
+     padding: 0%; 
+     height: 100vh;
+}
+.ico{
+    width: auto; 
+    height: 200px;
+}
+.imgDiv, .h1Div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.h1Div{
+    color: white;
+    font-size: 20px;
+}
+.add{
+    background-color: white;
+    border-radius: 20px;
+    height: 400px;
+    width: 600px;
+    margin-left: 390px;
+}
+.uploadImage{
+    background-color: black;
+    border-radius: 20px;
+    width: 150px;
+    height: 120px;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translateX(-50%);
+    align-items: center;
+    display: flex;
+    justify-content: space-evenly;
+    cursor: pointer;
+}
+.h1Div2{
+    color: #FF5E00;
+    position: absolute;
+    top: 72%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.fields{
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.fields input{
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #FF5E00;
+    width: 300px;
+    font-size: 20px;
+    color: black;
+}
+.fields input::placeholder{
+    color: black;
+    font-size: 20px;
+}
