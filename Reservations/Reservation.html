@@ -15,6 +15,33 @@
     <img src="/assets/appIcon-noBackground.png">
   </div>
   <h1>Reservation</h1>
+   <script>
+    document.querySelector("button").addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const data = {
+        username: document.querySelector('input[placeholder="Enter Username"]').value,
+        start_date: document.querySelectorAll('input[type="date"]')[0].value,
+        start_time: document.querySelectorAll('input[type="time"]')[0].value,
+        end_date: document.querySelectorAll('input[type="date"]')[1].value,
+        end_time: document.querySelectorAll('input[type="time"]')[1].value
+      };
+
+      fetch("http://localhost:5000/reserve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(response => {
+        alert(response.message);
+      })
+      .catch(error => {
+        alert("An error occurred while sending the request");
+        console.error(error);
+      });
+    });
+  </script>
 
   <div class="container">
      <label>Enter Username</label>
