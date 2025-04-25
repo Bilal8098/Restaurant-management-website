@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Akalaty</title>
+  <link rel="stylesheet" href="homepageStyle.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Arial&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+
+    <!-- 🔶 NAVBAR IN GRADIENT CONTAINER -->
+    <div class="navbar-container">
+      <header>
+        <div class="brand">Akalaty</div>
+        <div class="search">
+          <input type="text" placeholder="Search..." />
+          <button><span>🔍</span></button>
+        </div>
+        <div class="header-icons">
+          <button class="check-icon">✔️</button>
+          <button class="profile-icon" id="profileToggle">👤</button>
+
+        </div>
+      </header>
+    </div>
+
+    <!-- Profile Actions -->
+<aside class="profile-actions" id="profileActions">
+    <button class="edit-btn">edit profile</button>
+    <button class="logout-btn">logout</button>
+  </aside>
+  
+
+    <!-- Most Ordered Section -->
+    <section class="most-ordered">
+        <h2>Most ordered</h2>
+        <div class="ordered-images">
+          <div class="image-box"></div>
+          <div class="image-box"></div>
+          <span class="more-btn">more ➤</span>
+        </div>
+      </section>
+      
+
+    <!-- Reservation Section -->
+    <section class="reserve">
+      <p>Wanna reserve?<br><strong>View our tables</strong></p>
+      <div class="tables">
+        <div class="table-card">Location: Inside<br>Number of seats: 6</div>
+        <div class="table-card">Location: Outside<br>Number of seats: 4</div>
+        <span class="more-btn">more ➤</span>
+      </div>
+    </section>
+
+    <!-- Feedback Section -->
+    <section class="feedbacks">
+      <h2>Feedbacks</h2>
+      <div class="comment-box">
+        <input type="text" placeholder="Post comment...." />
+        <button class="send-btn">✈️</button>
+      </div>
+      <div class="comment">
+        <span>👤</span> Ohhh my god the best restaurant of all time
+      </div>
+      <div class="comment">
+        <span>👤</span> Ohhh my god the worst restaurant of all time
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>Contact us</p>
+      <div class="social-icons">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/X_logo_2023.svg" alt="X" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" />
+        <img src="https://upload.wikimedia.org/wikipedia/en/0/0a/TikTok_logo.svg" alt="TikTok" />
+      </div>
+    </footer>
+
+  </div>
+  <script>
+    const profileToggleBtn = document.getElementById('profileToggle');
+    const profileActions = document.getElementById('profileActions');
+  
+    profileToggleBtn.addEventListener('click', () => {
+      if (profileActions.style.display === 'flex') {
+        profileActions.style.display = 'none';
+      } else {
+        profileActions.style.display = 'flex';
+      }
+    });
+  </script>
+  
+</body>
+</html>

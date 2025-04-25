@@ -21,15 +21,19 @@
 </div>
 <div class="add">
     <div class="uploadImage">
-        <img src="../assets/addIcon.png" alt="">
+        <img id="imagePreview" src="../assets/addIcon.png" alt="Click to upload image" onclick="document.getElementById('imageInput').click()">
+        <input type="file" id="imageInput" style="display: none;" onchange="previewImage(event)">
     </div>
 </div>
-    <div class="h1Div2">
-        <h1>Upload image</h1>
-    </div>
+<div class="h1Div2">
+    <h1>Upload image</h1>
+</div>
 <div class="fields">
     <input type="text" placeholder="Location">
     <input type="number" placeholder="Number of seats">
 </div>
+<button onclick="submitForm()" class="butt">Submit</button>
+
+<script src="addTableScript.js"></script>
 </body>
 </html>
