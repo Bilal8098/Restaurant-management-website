@@ -6,7 +6,6 @@
     <title>Login</title>
     <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/x-icon">
     <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/png">
-    <!-- Optional: for better resolution on high-DPI displays -->
     <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="32x32">
     <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="192x192">
     <link rel="stylesheet" href="LoginStyle.css">
@@ -24,11 +23,14 @@
         <h1>
             Sign in
         </h1>
-        <input type="email" placeholder="Email" class="email">
-        <input type="password" class="password" placeholder="Password">
-        <button class="butt">Login</button>
+        <form id="loginForm">
+            <input type="email" placeholder="Email" class="email" name="email" required>
+            <input type="password" class="password" placeholder="Password" name="password" required>
+            <button type="submit" class="butt">Login</button>
+        </form>
         <a href="SignUp.html">Create account</a>
     </div>
  </div>
+ <script src="loginScript.js"></script>
 </body>
 </html>
