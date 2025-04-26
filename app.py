@@ -175,5 +175,42 @@ def get_feedbacks():
 #         return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
 
 # -------------------- MAIN --------------------
+
+@app.route('/reserve', methods=['POST'])
+def reserve():
+    data = request.get_json()
+    username = data.get('username')
+    start_date = data.get('start_date')
+    start_time = data.get('start_time')
+    end_date = data.get('end_date')
+    end_time = data.get('end_time')
+
+    start_datetime = f"{start_date} {start_time}"
+    end_datetime = f"{end_date} {end_time}"
+
+    check_sql = """
+        SELECT * FROM Reservations
+        WHERE (StartDateTime < %s AND EndDateTime > %s)
+    """
+    cursor.execute(check_sql, (end_datetime, start_datetime))
+    result = cursor.fetchone()
+
+    if result:
+        return jsonify({'message': 'This time slot is already reserved'}), 409
+
+    insert_sql = """
+        INSERT INTO Reservations (Username, StartDateTime, EndDateTime)
+        VALUES (%s, %s, %s)
+    """
+    values = (username, start_datetime, end_datetime)
+    cursor.execute(insert_sql, values)
+    db.commit()
+
+    return jsonify({'message': 'Reservation saved successfully'})
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+
