@@ -174,43 +174,52 @@ def get_feedbacks():
 #     except Exception as e:
 #         return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
 
-# -------------------- MAIN --------------------
-
 @app.route('/reserve', methods=['POST'])
 def reserve():
     data = request.get_json()
-    username = data.get('username')
-    start_date = data.get('start_date')
-    start_time = data.get('start_time')
+    user_id = data.get('user_id')          # <-- we need user_id (integer)
+    table_id = data.get('table_id')         # <-- we need table_id (integer)
+    start_date = data.get('start_date')     # expected format: 'YYYY-MM-DD'
+    start_time = data.get('start_time')     # expected format: 'HH:MM:SS'
     end_date = data.get('end_date')
     end_time = data.get('end_time')
 
     start_datetime = f"{start_date} {start_time}"
     end_datetime = f"{end_date} {end_time}"
 
-    check_sql = """
-        SELECT * FROM Reservations
-        WHERE (StartDateTime < %s AND EndDateTime > %s)
-    """
-    cursor.execute(check_sql, (end_datetime, start_datetime))
-    result = cursor.fetchone()
+    try:
+        cur = conn.cursor()
 
-    if result:
-        return jsonify({'message': 'This time slot is already reserved'}), 409
+        # Check if the table is already reserved in the given time
+        check_sql = """
+            SELECT * FROM Reservations
+            WHERE TableID = %s AND (
+                (startDate < %s AND endDate > %s)
+            )
+        """
+        cur.execute(check_sql, (table_id, end_datetime, start_datetime))
+        result = cur.fetchone()
 
-    insert_sql = """
-        INSERT INTO Reservations (Username, StartDateTime, EndDateTime)
-        VALUES (%s, %s, %s)
-    """
-    values = (username, start_datetime, end_datetime)
-    cursor.execute(insert_sql, values)
-    db.commit()
+        if result:
+            cur.close()
+            return jsonify({'status': 'fail', 'message': 'This table is already reserved at that time'}), 409
 
-    return jsonify({'message': 'Reservation saved successfully'})
+        # Insert the reservation
+        insert_sql = """
+            INSERT INTO Reservations (UserID, TableID, startDate, endDate, Status)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        values = (user_id, table_id, start_datetime, end_datetime, 'Pending')
+        cur.execute(insert_sql, values)
+        conn.commit()
+        cur.close()
 
+        return jsonify({'status': 'success', 'message': 'Reservation saved successfully'})
 
+    except Exception as e:
+        return jsonify({'status': 'fail', 'message': f'Error: {str(e)}'}), 500
+
+# -------------------- MAIN --------------------
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-

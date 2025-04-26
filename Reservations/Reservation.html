@@ -14,17 +14,38 @@
   <div class="logo">
     <img src="/assets/appIcon-noBackground.png">
   </div>
+  
   <h1>Reservation</h1>
-   <script>
+
+  <div class="container">
+    <label>Enter User ID</label>
+    <input type="number" id="user_id" placeholder="Enter User ID">
+
+    <label>Enter Table ID</label>
+    <input type="number" id="table_id" placeholder="Enter Table ID">
+
+    <label>Start Date & Time</label>
+    <input type="date" id="start_date">
+    <input type="time" id="start_time">
+
+    <label>End Date & Time</label>
+    <input type="date" id="end_date">
+    <input type="time" id="end_time">
+
+    <button>Reserve</button>
+  </div>
+
+  <script>
     document.querySelector("button").addEventListener("click", function (e) {
       e.preventDefault();
 
       const data = {
-        username: document.querySelector('input[placeholder="Enter Username"]').value,
-        start_date: document.querySelectorAll('input[type="date"]')[0].value,
-        start_time: document.querySelectorAll('input[type="time"]')[0].value,
-        end_date: document.querySelectorAll('input[type="date"]')[1].value,
-        end_time: document.querySelectorAll('input[type="time"]')[1].value
+        user_id: document.getElementById('user_id').value,
+        table_id: document.getElementById('table_id').value,
+        start_date: document.getElementById('start_date').value,
+        start_time: document.getElementById('start_time').value,
+        end_date: document.getElementById('end_date').value,
+        end_time: document.getElementById('end_time').value
       };
 
       fetch("http://localhost:5000/reserve", {
@@ -42,20 +63,5 @@
       });
     });
   </script>
-
-  <div class="container">
-     <label>Enter Username</label>
-    <input type="text" placeholder="Username">
-    
-    <label>Start Date & Time</label>
-    <input type="date">
-    <input type="time">
-
-    <label>End Date & Time</label>
-    <input type="date">
-    <input type="time">
-
-    <button>Reserve</button>
-  </div>
 </body>
 </html>
