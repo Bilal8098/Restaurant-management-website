@@ -37,20 +37,36 @@ async function fetchTables() {
   const container = document.getElementById('tablesContainer');
 
   if (data.status === 'success') {
-      data.tables.slice(0, 4).forEach(table => {  // only first 4 tables
-          const card = document.createElement('div');
-          card.className = 'table-card';
-          card.innerHTML = `
-              <img src="data:image/png;base64,${table.Image || ''}" alt="Table ${table.TableID}" />
-              <div class="overlay">
-                  <div class="detail">Location: ${table.Location}</div>
-                  <div class="detail">Seats: ${table.NumberOfSeats}</div>
-              </div>
-          `;
-          container.appendChild(card);
+    data.tables.slice(0, 4).forEach(table => {
+      const card = document.createElement('div');
+      card.className = 'table-card';
+
+      card.innerHTML = `
+          <img src="data:image/png;base64,${table.Image || ''}" alt="Table ${table.TableID}" />
+          <div class="overlay">
+              <div class="detail">Location: ${table.Location}</div>
+              <div class="detail">Seats: ${table.NumberOfSeats}</div>
+              <button class="reserve-btn">Reserve</button>
+          </div>
+      `;
+
+      // Select the reserve button INSIDE the card
+      const reserveButton = card.querySelector('.reserve-btn');
+      reserveButton.addEventListener('click', () => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+          alert('Please log in first.');
+          return window.location.href = '../AuthFiles/Login.html';
+        }
+        // redirect to the reserve page with tableId as query
+        window.location.href = `../Reservations/Reservation.html?tableId=${table.TableID}`;
       });
+
+      container.appendChild(card);
+    });
   }
 }
+
 
 async function fetchFeedbacks() {
   const response = await fetch('http://localhost:5000/get_feedbacks');
@@ -70,6 +86,13 @@ async function fetchFeedbacks() {
   }
 }
 
+const logoutButton = document.getElementById('logOut');
+logoutButton.addEventListener('click', function () {
+  // Clear the userId from localStorage
+  localStorage.removeItem('userId');
+  // Redirect to login page
+  window.location.href = "../AuthFiles/Login.html";
+});
 // Call functions when page loads
 window.onload = () => {
   fetchMenuItems();

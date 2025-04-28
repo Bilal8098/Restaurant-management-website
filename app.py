@@ -8,6 +8,7 @@ import io
 
 app = Flask(__name__)
 CORS(app)
+app.secret_key = 'secretKey123'
 
 # Database connection
 conn = psycopg2.connect(
@@ -23,18 +24,21 @@ conn = psycopg2.connect(
 def login():
     email = request.form.get('email')
     password = request.form.get('password')
-    print("Received login:", email, password)
 
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Users WHERE Email = %s AND Password = %s", (email, password))
-    user = cur.fetchone()
+    cur.execute("SELECT UserID FROM Users WHERE Email = %s AND Password = %s", (email, password))
+    row = cur.fetchone()
     cur.close()
 
-    if user:
-        return jsonify({"status": "success", "message": "Login successful"})
+    if row:
+        user_id = row[0]
+        return jsonify({
+            "status": "success",
+            "message": "Login successful",
+            "user_id": user_id
+        })
     else:
         return jsonify({"status": "fail", "message": "Invalid email or password"}), 401
-
 # -------------------- ADD MENU ITEM --------------------
 @app.route('/add_menu_item', methods=['POST'])
 def add_menu_item():
@@ -221,6 +225,32 @@ def reserve():
 
     except Exception as e:
         return jsonify({'status': 'fail', 'message': f'Error: {str(e)}'}), 500
+
+# -------------------- SIGN UP --------------------
+@app.route('/signup', methods=['POST'])
+def signup():
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    # Check if the email is already in use
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Users WHERE Email = %s", (email,))
+    existing_user = cur.fetchone()
+
+    if existing_user:
+        cur.close()
+        return jsonify({"status": "fail", "message": "Email already in use"}), 409
+
+    # Insert the new user into the Users table
+    try:
+        cur.execute("INSERT INTO Users (Email, Password) VALUES (%s, %s)", (email, password))
+        conn.commit()
+        cur.close()
+        return jsonify({"status": "success", "message": "User registered successfully"}), 201
+
+    except Exception as e:
+        cur.close()
+        return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
 
 # -------------------- MAIN --------------------
 

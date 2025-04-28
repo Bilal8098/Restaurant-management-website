@@ -31,16 +31,14 @@ async function loadTables() {
   
           
           reserveButton.addEventListener('click', () => {
-            const userToken = localStorage.getItem('userToken');
+            const userToken = localStorage.getItem('userId');
             
             if (!userToken) {
               alert('Please log in first.');
-              window.location.href = '/login.html'; 
+              window.location.href = '../AuthFiles/Login.html'; 
 
             } else {
-              alert(`Ready to reserve Table ${table.TableID}!`);
-              
-            }
+              window.location.href = `../Reservations/Reservation.html?tableId=${table.TableID}`;            }
           });
   
           cardContent.appendChild(tableName);
