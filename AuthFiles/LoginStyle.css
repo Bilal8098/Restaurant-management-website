@@ -49,10 +49,6 @@ body{
     color: black; 
 }
 .password{
-        position: absolute;
-        top: 55%;
-        left: 50%;
-        transform: translate(-50%, -50%);
         color: white; 
         font-weight: bold;
         width: 400px;
@@ -104,3 +100,19 @@ body{
     font-size: clamp(0.875rem, 2vw, 1rem);
 
 }
+.password-container {
+    position: relative;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #FF5E00;
+  }

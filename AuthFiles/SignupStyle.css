@@ -118,3 +118,36 @@ color: white;
     height: 60vh;
   }
 }
+
+.password-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.password-container input {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.password-container input:focus {
+  outline: none;
+  border: 2px solid #f75800;
+  box-shadow: 0 0 5px #f75800;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 40%;
+  right: -10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #f75800;
+}
+
+.password-container{
+  margin-left: -25px !important;
+}

@@ -9,6 +9,8 @@
     <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="32x32">
     <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="192x192">
     <link rel="stylesheet" href="LoginStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 <body>
  <div class="main">
@@ -25,8 +27,11 @@
         </h1>
         <form id="loginForm">
             <input type="email" placeholder="Email" class="email" name="email" required>
-            <input type="password" class="password" placeholder="Password" name="password" required>
-            <button type="submit" class="butt">Login</button>
+            <div class="password-container">
+                <input type="password" class="password" id="password" placeholder="Password" name="password" required>
+                <i class="fa-solid fa-eye toggle-password" onclick="togglePassword()"></i>
+              </div>
+              <button type="submit" class="butt">Login</button>
         </form>
         <a href="SignUp.html">Create account</a>
     </div>

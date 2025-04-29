@@ -36,3 +36,17 @@ function signUp() {
 
   // Add event listener to sign up button
   document.querySelector('button').addEventListener('click', signUp);
+  
+  const toggles = document.querySelectorAll('.toggle-password');
+  toggles.forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const input = toggle.previousElementSibling;
+      if (input.type === 'password') {
+        input.type = 'text';
+        toggle.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        input.type = 'password';
+        toggle.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    });
+  });

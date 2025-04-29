@@ -9,6 +9,7 @@
   <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="32x32">
   <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="192x192">
   <link rel="stylesheet" href="SignupStyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
   <div class="container">
@@ -16,9 +17,16 @@
       <h2>Sign up</h2>
       <div class="form">
         <input type="email" placeholder="Email" required />
-        <input type="password" placeholder="Password" required />
-        <input type="password" placeholder="Confirm password" required />
-        <button>Sign Up</button>
+        <div class="password-container">
+          <input type="password" placeholder="Password" required />
+          <i class="fa-solid fa-eye toggle-password"></i>
+        </div>
+      
+        <div class="password-container">
+          <input type="password" placeholder="Confirm password" required/>
+          <i class="fa-solid fa-eye toggle-password"></i>
+        </div>
+        <button style="color: white; font-weight: bold;">Sign Up</button>
       </div>
       <div class="Login-link">
         Already have an account? <a href="Login.html">Login</a>
