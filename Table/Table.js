@@ -14,9 +14,12 @@ async function loadTables() {
           const img = document.createElement('img');
           if (table.Image) {
             img.src = `data:image/png;base64,${table.Image}`;
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', () => openImagePreview(img.src));
           } else {
             img.alt = 'No Image';
           }
+          
   
           const cardContent = document.createElement('div');
           cardContent.className = 'table-card-content';
@@ -59,3 +62,23 @@ async function loadTables() {
   
   window.addEventListener('DOMContentLoaded', loadTables);
   
+
+  // Setup modal preview
+const modal = document.getElementById('image-modal');
+const modalImg = document.getElementById('preview-img');
+const closeBtn = document.querySelector('.close');
+
+function openImagePreview(src) {
+  modal.style.display = 'block';
+  modalImg.src = src;
+}
+
+closeBtn.onclick = function () {
+  modal.style.display = 'none';
+};
+
+window.onclick = function (event) {
+  if (event.target === modal) {
+    modal.style.display = 'none';
+  }
+};
