@@ -1,48 +1,46 @@
-window.addEventListener('DOMContentLoaded', () => {
-  fetchMenuItems();
-});
 
-function fetchMenuItems() {
-  fetch('http://localhost:5000/get_menu_items')
-    .then(response => response.json())
-    .then(data => {
-      if (data.status === "success") {
-        const menuGrid = document.getElementById('menu-grid');
-        data.menu_items.forEach(item => {
+function toggleProfile() {
+  const box = document.getElementById('profileActions');
+  box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    fetchMenuItems();
+  });
+  
+  function fetchMenuItems() {
+    fetch('http://localhost:5000/api/menu')  
+      .then(response => response.json())
+      .then(data => {
+        const menuGrid = document.querySelector('.menu-grid');
+        data.forEach(item => {
           const menuItem = document.createElement('div');
           menuItem.classList.add('menu-item');
-
+  
           const menuCard = document.createElement('div');
           menuCard.classList.add('menu-card');
-
+  
           const menuImage = document.createElement('img');
-          if (item.Image) {
-            menuImage.src = `data:image/jpeg;base64,${item.Image}`;
-          } else {
-            menuImage.src = 'default-image.jpg'; // fallback image if no image exists
-          }
-          menuImage.alt = item.ItemName;
-
+          menuImage.src = item.image_url || 'default-image.jpg';  
+          menuImage.alt = item.name;
+  
           const menuPrice = document.createElement('div');
           menuPrice.classList.add('menu-price');
-          menuPrice.innerText = `${item.Price}$`;
-
+          menuPrice.innerText = `${item.price}$`;
+  
           menuCard.appendChild(menuImage);
           menuCard.appendChild(menuPrice);
           menuItem.appendChild(menuCard);
-
+  
           const menuLabel = document.createElement('div');
           menuLabel.classList.add('menu-label');
-          menuLabel.innerText = item.ItemName;
-
+          menuLabel.innerText = item.name;
+  
           menuItem.appendChild(menuLabel);
           menuGrid.appendChild(menuItem);
         });
-      } else {
-        console.error('Failed to fetch menu items:', data.message);
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching menu:', error);
-    });
-}
+      })
+      .catch(error => {
+        console.error('Error fetching menu:', error);
+      });
+  }
