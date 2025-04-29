@@ -1,0 +1,57 @@
+  /* full‐screen gradient background */
+  body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #ff4e00, #f9a602, #ffcc99);
+  }
+
+  /* center & scroll container if needed */
+  .container {
+    min-height: 100vh;
+    padding: 20px;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+  }
+
+  /* the white card with its own gradient */
+  .profile-container {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: #ff4e00;
+  }
+
+  /* fixed‐size picture wrapper prevents overflow */
+  
+  .form-label,
+  .input-group-text,
+  .form-control {
+    color: #333 !important;
+  }
+
+  .form-control {
+    border-radius: 8px;
+  }
+    
+  .btn-primary {
+    background: #ff7e00;
+    border: none;
+    font-size: 18px;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background: #e65c00;
+  }
+
+  .input-group-text {
+    background: #ff7e00;
+    color: #fff;
+    border-radius: 8px 0 0 8px;
+  }

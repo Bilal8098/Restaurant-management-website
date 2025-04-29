@@ -251,8 +251,46 @@ def signup():
     except Exception as e:
         cur.close()
         return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
+    
+# ---- GET PROFILE ----
+
+@app.route('/get_profile', methods=['GET'])
+def get_profile():
+    user_id = request.args.get('user_id')
+    if not user_id:
+        return jsonify({'status': 'error', 'message': 'Missing user_id'}), 400
+
+    cursor = conn.cursor()
+    cursor.execute("SELECT Email FROM Users WHERE UserID = %s", (user_id,))
+    row = cursor.fetchone()
+
+    if row:
+        return jsonify({'status': 'success', 'profile': {'email': row[0]}})
+    else:
+        return jsonify({'status': 'error', 'message': 'User not found'})
+    
+# ---- UPDATE PROFILE ----
+# @app.route('/update_profile', methods=['POST'])
+# def update_profile():
+#     user_id      = request.form.get('user_id')
+#     old_password = request.form.get('oldPassword')
+#     new_password = request.form.get('newPassword')
+
+#     cursor = conn.cursor()
+#     cursor.execute("SELECT Password FROM Users WHERE UserID = %s", (user_id,))
+#     row = cursor.fetchone()
+
+#     if not row:
+#         return jsonify({'status': 'error', 'message': 'User not found'})
+
+#     if row[0] != old_password:
+#         return jsonify({'status': 'error', 'message': 'Incorrect current password'})
+
+#     cursor.execute("UPDATE Users SET Password = %s WHERE UserID = %s", (new_password, user_id))
+#     conn.commit()
+
+#     return jsonify({'status': 'success'})
 
 # -------------------- MAIN --------------------
-
 if __name__ == '__main__':
     app.run(debug=True)

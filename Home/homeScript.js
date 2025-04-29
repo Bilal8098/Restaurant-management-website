@@ -9,7 +9,7 @@ async function fetchMenuItems() {
   const container = document.getElementById('menuContainer');
 
   if (data.status === 'success') {
-      data.menu_items.slice(0, 4).forEach(item => {  // only first 4 items
+      data.menu_items.slice(0, 3).forEach(item => {  // only first 4 items
           const card = document.createElement('div');
           card.className = 'image-box';
           card.innerHTML = `
@@ -37,7 +37,7 @@ async function fetchTables() {
   const container = document.getElementById('tablesContainer');
 
   if (data.status === 'success') {
-    data.tables.slice(0, 4).forEach(table => {
+    data.tables.slice(0, 2).forEach(table => {
       const card = document.createElement('div');
       card.className = 'table-card';
 
@@ -99,3 +99,7 @@ window.onload = () => {
   fetchTables();
   fetchFeedbacks();
 };
+document.getElementById('prof').addEventListener(
+  'click',
+  () =>{window.location.href = '../Profile/profile.html'}
+);
