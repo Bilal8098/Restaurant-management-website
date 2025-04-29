@@ -9,7 +9,7 @@ async function fetchMenuItems() {
   const container = document.getElementById('menuContainer');
 
   if (data.status === 'success') {
-      data.menu_items.slice(0, 3).forEach(item => {  // only first 4 items
+      data.menu_items.slice(0, 3).forEach(item => {  // only first 3 items
           const card = document.createElement('div');
           card.className = 'image-box';
           card.innerHTML = `
