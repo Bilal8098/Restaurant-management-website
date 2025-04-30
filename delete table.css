@@ -42,7 +42,7 @@ body {
   .topIcon {
     width: 100px;
     height: 70px;
-    border-radius: 10px;        /* ✅ مستطيلة بزوايا ناعمة */
+    border-radius: 10px;        
     object-fit: cover;
     background-color: white;
     border: 2px solid #FF5E00;
