@@ -382,6 +382,37 @@ def update_price():
     else:
         conn.close()
         return jsonify({"status": "error", "message": f"Item '{name}' not found."}), 404
+#-----------------------getReservations--------------
+@app.route('/reservations', methods=['GET'])
+def get_reservations():
+    try:
+        cur = conn.cursor()
+
+        query = """
+            SELECT ReservationID, UserID, TableID, startDate, endDate, Status, PhoneNumber, Name
+            FROM Reservations
+            ORDER BY startDate DESC
+        """
+        cur.execute(query)
+        rows = cur.fetchall()
+
+        # Extract column names
+        columns = [desc[0] for desc in cur.description]
+
+        # Convert rows to list of dictionaries
+        reservations = [dict(zip(columns, row)) for row in rows]
+
+        cur.close()
+        return jsonify({
+            'status': 'success',
+            'data': reservations
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            'status': 'fail',
+            'message': f'Error: {str(e)}'
+        }), 500
 
 #-----------------------MAIN-------------------------
 if __name__ == '__main__':

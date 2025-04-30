@@ -46,3 +46,4 @@ function fetchMenuItems() {
       console.error('Error fetching menu:', error);
     });
 }
+
