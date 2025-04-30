@@ -12,6 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
   fetchMenuItems();
 });
 
+
 function fetchMenuItems() {
   fetch('http://localhost:5000/get_menu_items')
     .then(response => response.json())

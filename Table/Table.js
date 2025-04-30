@@ -80,6 +80,7 @@ const closeBtn = document.querySelector('.close');
 function openImagePreview(src) {
   modal.style.display = 'block';
   modalImg.src = src;
+  
 }
 
 closeBtn.onclick = function () {
