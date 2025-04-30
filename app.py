@@ -302,6 +302,20 @@ def delete_menu_item():
         return jsonify({"status": "success", "message": f"Item '{name}' deleted."})
     else:
         return jsonify({"status": "error", "message": f"Item '{name}' not found."}), 404
+        
+#-----------------------delete table-------------------------
+@app.route('/delete_table', methods=['POST'])
+def delete_table():
+    data = request.get_json()
+    table_id = data.get('table_id')
+    name = data.get('name')
+
+    if table_id in tables:
+        del tables[table_id]
+        return jsonify({"status": "success", "message": f"Table {table_id} for {name} deleted."})
+    else:
+        return jsonify({"status": "error", "message": f"Table {table_id} not found."}), 404
+        
 #-----------------------MAIN-------------------------
 if __name__ == '__main__':
     app.run(debug=True)
