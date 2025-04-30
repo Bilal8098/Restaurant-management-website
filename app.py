@@ -328,24 +328,40 @@ def delete_menu_item():
     data = request.get_json()
     name = data.get('name')
 
-    if name in menu_items:
-        del menu_items[name]
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM menu WHERE name = ?", (name,))
+    item = cur.fetchone()
+
+    if item:
+        cur.execute("DELETE FROM menu WHERE name = ?", (name,))
+        conn.commit()
+        conn.close()
         return jsonify({"status": "success", "message": f"Item '{name}' deleted."})
     else:
+        conn.close()
         return jsonify({"status": "error", "message": f"Item '{name}' not found."}), 404
-        
+
 #-----------------------delete table-------------------------
 @app.route('/delete_table', methods=['POST'])
 def delete_table():
     data = request.get_json()
     table_id = data.get('table_id')
 
-    if table_id in tables:
-        del tables[table_id]
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM tables WHERE id = ?", (table_id,))
+    table = cur.fetchone()
+
+    if table:
+        cur.execute("DELETE FROM tables WHERE id = ?", (table_id,))
+        conn.commit()
+        conn.close()
         return jsonify({"status": "success", "message": f"Table {table_id} deleted."})
     else:
+        conn.close()
         return jsonify({"status": "error", "message": f"Table {table_id} not found."}), 404
-        
+
 #-------------------------------Edit Price--------------------------
 @app.route('/update_price', methods=['POST'])
 def update_price():
@@ -353,10 +369,18 @@ def update_price():
     name = data.get('name')
     new_price = data.get('price')
 
-    if name in menu_items:
-        menu_items[name] = new_price
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM menu WHERE name = ?", (name,))
+    item = cur.fetchone()
+
+    if item:
+        cur.execute("UPDATE menu SET price = ? WHERE name = ?", (new_price, name))
+        conn.commit()
+        conn.close()
         return jsonify({"status": "success", "message": f"Price of '{name}' updated to {new_price}."})
     else:
+        conn.close()
         return jsonify({"status": "error", "message": f"Item '{name}' not found."}), 404
 
 #-----------------------MAIN-------------------------
