@@ -330,9 +330,9 @@ body {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #FF6B00, #FF4500);
-  border: none;
-  color: white;
+  background: white;
+  border: none; 
+  color:#ff6f00;
   font-size: 2rem;
   cursor: pointer;
   box-shadow: 0 8px 25px rgba(255, 107, 0, 0.4);
