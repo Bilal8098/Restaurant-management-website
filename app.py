@@ -308,11 +308,10 @@ def delete_menu_item():
 def delete_table():
     data = request.get_json()
     table_id = data.get('table_id')
-    name = data.get('name')
 
     if table_id in tables:
         del tables[table_id]
-        return jsonify({"status": "success", "message": f"Table {table_id} for {name} deleted."})
+        return jsonify({"status": "success", "message": f"Table {table_id} deleted."})
     else:
         return jsonify({"status": "error", "message": f"Table {table_id} not found."}), 404
         
