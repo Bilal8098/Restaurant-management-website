@@ -1,11 +1,222 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Table Reservations Calendar</title>
 </head>
 <body>
-    
+    <h1>Table Reservations Calendar</h1>
+    <div class="calendar-container">
+        <div class="calendar-controls">
+            <button id="prev-week">◀ Previous</button>
+            <span id="week-range"></span>
+            <button id="next-week">Next ▶</button>
+        </div>
+        <table class="calendar-table">
+            <thead>
+                <tr id="calendar-header"></tr>
+            </thead>
+            <tbody id="calendar-body"></tbody>
+        </table>
+    </div>
+    <script>
+        // Utilities for padding and YYYY-MM-DD
+        function pad(n){ return n<10?'0'+n:''+n }
+        function ymd(date){
+          return date.getFullYear() + '-' +
+                 pad(date.getMonth()+1) + '-' +
+                 pad(date.getDate());
+        }
+      
+        // Get Monday of current week at LOCAL midnight
+        function getStartOfWeek(date){
+          const d    = new Date(date);
+          const day  = d.getDay();
+          // shift Sunday (0) back to previous Monday
+          const diff = d.getDate() - day + (day===0?-6:1);
+          const m    = new Date(d.setDate(diff));
+          return new Date(m.getFullYear(), m.getMonth(), m.getDate());
+        }
+      
+        let currentWeekStart = getStartOfWeek(new Date());
+        const refreshInterval = setInterval(loadCalendar, 5000);
+      
+        async function fetchReservations(){
+          try {
+            const res = await fetch('http://127.0.0.1:5000/reservations', {
+              headers:{'Content-Type':'application/json'}, mode:'cors'
+            });
+            if(!res.ok) throw new Error(res.status);
+            const j = await res.json();
+            return j.data || [];
+          } catch(e){
+            console.error('fetchReservations', e);
+            return [];
+          }
+        }
+      
+        async function fetchTables(){
+          try {
+            const res = await fetch('http://127.0.0.1:5000/get_tables', {
+              headers:{'Content-Type':'application/json'}, mode:'cors'
+            });
+            if(!res.ok) throw new Error(res.status);
+            const j = await res.json();
+            return j.tables || [];
+          } catch(e){
+            console.error('fetchTables', e);
+            return [];
+          }
+        }
+      
+        function normalizeReservations(raw){
+          return raw.map(r=>({
+            ReservationID: r.reservationid,
+            UserID:        r.userid,
+            TableID:       r.tableid,
+            startDate:     r.startdate,
+            endDate:       r.enddate,
+            Name:          r.name,
+            PhoneNumber:   r.phonenumber,
+            Status:        r.status
+          }));
+        }
+      
+        function normalizeTables(raw){
+          return raw.map(t=>({
+            TableID: t.tableid
+          }));
+        }
+      
+        function processReservations(reservations, tables, weekStart){
+          // Build weekEnd at local midnight +6 days
+          const weekEnd = new Date(
+            weekStart.getFullYear(),
+            weekStart.getMonth(),
+            weekStart.getDate() + 6
+          );
+      
+          // init empty
+          const grouped = {};
+          tables.forEach(t => {
+            grouped[t.TableID] = {};
+            for(let i=0; i<7; i++){
+              const day = new Date(
+                weekStart.getFullYear(),
+                weekStart.getMonth(),
+                weekStart.getDate() + i
+              );
+              grouped[t.TableID][ ymd(day) ] = [];
+            }
+          });
+      
+          reservations.forEach(res => {
+            // parse into JS Date
+            const start = new Date(res.startDate);
+            const end   = new Date(res.endDate);
+            if (start >= end) return;
+      
+            // cursor at START's local date
+            let cursor = new Date(start.getFullYear(),
+                                  start.getMonth(),
+                                  start.getDate());
+            // lastDay at END's local date
+            const lastDay = new Date(end.getFullYear(),
+                                     end.getMonth(),
+                                     end.getDate());
+      
+            // walk each calendar day from start→end
+            while(cursor <= lastDay){
+              const key = ymd(cursor);
+              if (grouped[res.TableID] && grouped[res.TableID][key]) {
+                grouped[res.TableID][key].push(res);
+              }
+              cursor.setDate(cursor.getDate() + 1);
+            }
+          });
+      
+          return grouped;
+        }
+      
+        function renderCalendar(weekStart, grouped, tables){
+          // Build 7‐day array
+          const days = [];
+          for(let i=0;i<7;i++){
+            days.push(new Date(
+              weekStart.getFullYear(),
+              weekStart.getMonth(),
+              weekStart.getDate() + i
+            ));
+          }
+      
+          // Header
+          document.getElementById('calendar-header').innerHTML =
+            '<th>Table</th>' +
+            days.map(d=>
+              `<th>${d.toLocaleDateString('en-US',{weekday:'short'})}<br>${d.getDate()}</th>`
+            ).join('');
+      
+          // Body
+          const tbody = document.getElementById('calendar-body');
+          tbody.innerHTML = '';
+          tables
+            .sort((a,b)=>a.TableID-b.TableID)
+            .forEach(t=>{
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>Table ${t.TableID}</td>`;
+              days.forEach(d=>{
+                const cell = document.createElement('td');
+                const list = (grouped[t.TableID]||{})[ymd(d)]||[];
+                list.forEach(res=>{
+                  const s = new Date(res.startDate).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+                  const e = new Date(res.endDate).toLocaleTimeString([],   {hour:'2-digit',minute:'2-digit'});
+                  const div = document.createElement('div');
+                  div.className = 'reservation-item';
+                  div.innerHTML = `
+                    <div>🕒 ${s} - ${e}</div>
+                    <div>👤 ${res.Name||'—'}</div>
+                    <div>📞 ${res.PhoneNumber||'—'}</div>
+                    <div>🟢 ${res.Status}</div>
+                  `;
+                  cell.appendChild(div);
+                });
+                tr.appendChild(cell);
+              });
+              tbody.appendChild(tr);
+            });
+        }
+      
+        function updateWeekRange(){
+          const end = new Date(
+            currentWeekStart.getFullYear(),
+            currentWeekStart.getMonth(),
+            currentWeekStart.getDate()+6
+          );
+          document.getElementById('week-range').textContent =
+            `${currentWeekStart.toLocaleDateString()} — ${end.toLocaleDateString()}`;
+        }
+      
+        document.getElementById('prev-week').onclick = ()=>{
+          currentWeekStart.setDate(currentWeekStart.getDate()-7);
+          loadCalendar();
+        };
+        document.getElementById('next-week').onclick = ()=>{
+          currentWeekStart.setDate(currentWeekStart.getDate()+7);
+          loadCalendar();
+        };
+      
+        async function loadCalendar(){
+          updateWeekRange();
+          const [rawR, rawT] = await Promise.all([fetchReservations(), fetchTables()]);
+          const reservations = normalizeReservations(rawR);
+          const tables       = normalizeTables(rawT);
+          const grouped      = processReservations(reservations, tables, currentWeekStart);
+          renderCalendar(currentWeekStart, grouped, tables);
+        }
+      
+        loadCalendar();
+        window.addEventListener('beforeunload', ()=>clearInterval(refreshInterval));
+      </script>
+      
 </body>
 </html>
