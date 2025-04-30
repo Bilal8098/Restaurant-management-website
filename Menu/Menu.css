@@ -1,19 +1,14 @@
-
 body {
   margin: 0;
-  padding: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(-135deg, #ffe0b2 0%, #ff9800 50%, #ff6f00 100%);
+  background-color:#ff6f00;
   overflow-x: hidden;
 }
 
-
 .container {
-  margin-top: 0;
   text-align: center;
-  padding: 10px 10px;
+  padding: 40px 20px;
 }
-
 .header {
   display: flex;
   justify-content: space-between;
@@ -144,37 +139,27 @@ h1 {
   font-weight: bold;
   
 }
-
-.scroll-wrapper {
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  scroll-snap-type: x mandatory;
-  padding-bottom: 20px;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
 .scroll-wrapper::-webkit-scrollbar {
   display: none;
 }
 
 .menu-grid {
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 180px;
-  grid-template-rows: repeat(2, 1fr);
-  gap: 20px;
-  padding: 10px;
-  width: max-content;
-  scrollbar-width: none;
+  grid-template-columns: repeat(2, 1fr); /* Two fixed columns */
+  grid-auto-rows: auto;
+  gap: 30px;
+  padding: 20px;
+  justify-content: center;
+  width: 100%;
 }
+
 
 .menu-grid::-webkit-scrollbar {
   display: none;
 }
 
 .menu-item {
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -256,45 +241,7 @@ h1 {
   transform: scale(1.05);
 }
 
-.add-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #fff3e0, #ffcc80);
-  border-radius: 20px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
-  width: 160px;
-  height: 160px;
-  cursor: pointer;
-  scroll-snap-align: start;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-  position: relative;
-}
-
-.add-card:hover {
-  transform: scale(1.07);
-  box-shadow: 0 10px 25px rgba(255, 111, 0, 0.25);
-}
-
-.add-card img {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 12px;
-  border-radius: 50%;
-  border: 3px solid #ff9800;
-  background-color: #fff3e0;
-  padding: 4px;
-  transition: transform 0.3s ease;
-}
-
-.add-card:hover img {
-  transform: scale(1.1);
-}
-
-.add-card span {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: #e65100;
-  letter-spacing: 0.5px;
+.menu-card{
+  width: 380px;
+  height: auto;
 }
