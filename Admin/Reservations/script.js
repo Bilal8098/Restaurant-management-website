@@ -10,11 +10,11 @@
   
     // find Monday (or shift Sunday) and return local-midnight Date
     function getStartOfWeek(date){
-      const d   = new Date(date);
-      const day = d.getDay();
-      const diff= d.getDate() - day + (day===0 ? -6 : 1);
-      const m   = new Date(d.setDate(diff));
-      return new Date(m.getFullYear(), m.getMonth(), m.getDate());
+      const d = new Date(date);
+      const day = d.getDay(); // 0 = Sunday, 6 = Saturday
+      const diff = d.getDate() - day; // Move back to Sunday
+      const sunday = new Date(d.setDate(diff));
+      return new Date(sunday.getFullYear(), sunday.getMonth(), sunday.getDate());
     }
   
     let currentWeekStart = getStartOfWeek(new Date());
@@ -139,7 +139,6 @@
               <div>🕒 ${start} - ${end}</div>
               <div>👤 ${r.Name||'—'}</div>
               <div>📞 ${r.PhoneNumber||'—'}</div>
-              <div>🟢 ${r.Status}</div>
             `;
             cell.appendChild(slot);
           });
