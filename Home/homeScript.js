@@ -1,105 +1,407 @@
-function toggleProfile() {
-  const box = document.getElementById('profileActions');
-  box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
-}
-
-async function fetchMenuItems() {
-  const response = await fetch('http://localhost:5000/get_menu_items');
-  const data = await response.json();
-  const container = document.getElementById('menuContainer');
-
-  if (data.status === 'success') {
-      data.menu_items.slice(0, 3).forEach(item => {  // only first 3 items
-          const card = document.createElement('div');
-          card.className = 'image-box';
-          card.innerHTML = `
-              <img src="data:image/png;base64,${item.Image}" alt="${item.ItemName}" />
-              <div class="overlay">
-                  <div class="detail">Price: $${item.Price}</div>
-              </div>
-          `;
-          container.appendChild(card);
-      });
-  }
-}
-
-function gotoTables() {
-  window.location.href = '../Table/Tables.html';
-}
-
-function gotoMenu() {
-  window.location.href = '../Menu/Menu.html';
-}
-
-async function fetchTables() {
-  const response = await fetch('http://localhost:5000/get_tables');
-  const data = await response.json();
-  const container = document.getElementById('tablesContainer');
-
-  if (data.status === 'success') {
-    data.tables.slice(0, 2).forEach(table => {
-      const card = document.createElement('div');
-      card.className = 'table-card';
-
-      card.innerHTML = `
-          <img src="data:image/png;base64,${table.Image || ''}" alt="Table ${table.TableID}" />
-          <div class="overlay">
-              <div class="detail">Location: ${table.Location}</div>
-              <div class="detail">Seats: ${table.NumberOfSeats}</div>
-              <button class="reserve-btn">Reserve</button>
-          </div>
-      `;
-
-      // Select the reserve button INSIDE the card
-      const reserveButton = card.querySelector('.reserve-btn');
-      reserveButton.addEventListener('click', () => {
-        const userId = localStorage.getItem('userId');
-        if (!userId) {
-          alert('Please log in first.');
-          return window.location.href = '../AuthFiles/Login.html';
-        }
-        // redirect to the reserve page with tableId as query
-        window.location.href = `../Reservations/Reservation.html?tableId=${table.TableID}`;
-      });
-
-      container.appendChild(card);
-    });
-  }
-}
-
-
-async function fetchFeedbacks() {
-  const response = await fetch('http://localhost:5000/get_feedbacks');
-  const data = await response.json();
-  const container = document.getElementById('feedbacksContainer');
-
-  if (data.status === 'success') {
-      data.feedbacks.forEach(feedback => {
-          const feedbackBox = document.createElement('div');
-          feedbackBox.className = 'feedback-box';
-          feedbackBox.innerHTML = `
-              <i class="fas fa-user-circle"></i>
-              <div class="feedback-text">${feedback.feedback}</div>
-          `;
-          container.appendChild(feedbackBox);
-      });
-  }
-}
-
-const logoutButton = document.getElementById('logOut');
-logoutButton.addEventListener('click', function () {
-  // Clear the userId from localStorage
-  localStorage.removeItem('userId');
-  // Redirect to login page
-  window.location.href = "../AuthFiles/Login.html";
-});
-// Call functions when page loads
-window.onload = () => {
-  fetchMenuItems();
-  fetchTables();
-  fetchFeedbacks();
+// DOM Elements
+const elements = {
+  menuContainer: document.getElementById('menuContainer'),
+  tablesContainer: document.getElementById('tablesContainer'),
+  feedbacksContainer: document.getElementById('feedbacksContainer'),
+  profileActions: document.getElementById('profileActions'),
+  sendBtn: document.querySelector('.send-btn'),
+  feedbackInput: document.querySelector('.input-container input'),
+  logoutBtn: document.getElementById('logOut'),
+  profileBtn: document.getElementById('prof')
 };
-document.getElementById('prof').addEventListener(
-  'click',
-  () =>{window.location.href = '../Profile/profile.html'}
-);
+
+// State Management
+const state = {
+  isLoading: false,
+  currentUser: JSON.parse(localStorage.getItem('userId')) || null
+};
+
+// Utility Functions
+const utils = {
+  showLoader: (element) => {
+    element.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
+  },
+  hideLoader: (element) => {
+    element.innerHTML = '';
+  },
+  showError: (element, message) => {
+    element.innerHTML = `<div class="error-message">${message}</div>`;
+  },
+  animateElement: (element, animation) => {
+    element.style.animation = `${animation} 0.6s ease forwards`;
+  },
+  formatPrice: (price) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(price);
+  }
+};
+
+// API Service
+const apiService = {
+  fetchMenuItems: async () => {
+    try {
+      const response = await fetch('http://localhost:5000/get_menu_items');
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching menu items:', error);
+      return { status: 'error', message: 'Failed to fetch menu items' };
+    }
+  },
+  fetchTables: async () => {
+    try {
+      const response = await fetch('http://localhost:5000/get_tables');
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching tables:', error);
+      return { status: 'error', message: 'Failed to fetch tables' };
+    }
+  },
+  fetchFeedbacks: async () => {
+    try {
+      const response = await fetch('http://localhost:5000/get_feedbacks');
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching feedbacks:', error);
+      return { status: 'error', message: 'Failed to fetch feedbacks' };
+    }
+  },
+  submitFeedback: async (userId, feedbackText) => {
+    try {
+      const response = await fetch('http://localhost:5000/add_feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          feedback: feedbackText
+        })
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      return { status: 'error', message: 'Failed to submit feedback' };
+    }
+  }
+};
+
+// UI Components
+const components = {
+  createMenuCard: (item) => {
+    const card = document.createElement('div');
+    card.className = 'menu-card animate-slide-up';
+    card.innerHTML = `
+      <div class="card-badge">🔥 Popular</div>
+      <div class="image-container">
+        <img src="data:image/png;base64,${item.Image}" 
+             alt="${item.ItemName}" 
+             loading="lazy"
+             onerror="this.src='../assets/fallback-image.png'" />
+      </div>
+      <div class="menu-content">
+        <h3 class="menu-title">${item.ItemName}</h3>
+        <div class="menu-meta">
+          <span class="menu-price">${utils.formatPrice(item.Price)}</span>
+        </div>
+      </div>
+    `;
+    return card;
+  },
+  createTableCard: (table) => {
+    const card = document.createElement('div');
+    card.className = 'table-card animate-slide-up';
+    card.innerHTML = `
+      <div class="table-image-container">
+        <img src="data:image/png;base64,${table.Image || ''}" alt="Table ${table.TableID}" loading="lazy" />
+      </div>
+      <div class="table-overlay">
+        <h3>Table ${table.TableID}</h3>
+        <div class="table-details">
+          <span><i class="fas fa-map-marker-alt"></i> ${table.Location}</span>
+          <span><i class="fas fa-chair"></i> ${table.NumberOfSeats} seats</span>
+        </div>
+        <button class="reserve-btn see-all" data-id="${table.TableID}">
+          Reserve Now <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    `;
+    return card;
+  },
+  createFeedbackItem: (feedback) => {
+    const item = document.createElement('div');
+    item.className = 'feedback-item animate-slide-up';
+    item.innerHTML = `
+      <div class="feedback-header">
+        <div class="user-avatar">
+          <i class="fas fa-user-circle" style="color: white;"></i>
+        </div>
+        <div class="user-info">
+          <h4 style="color: white;">${feedback.UserEmail}</h4>
+          <div class="rating">
+            ${Array(5).fill().map((_, i) => 
+              `<i class="fas fa-star ${i < (feedback.rating || 4) ? 'active' : ''}" style="color: gold;"></i>`
+            ).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="feedback-content" style="color: white;">${feedback.feedback}</div>
+    `;
+    return item;
+  }
+};
+
+// Event Handlers
+const handlers = {
+  toggleProfile: (e) => {
+    e.stopPropagation();
+    elements.profileActions.classList.toggle('active');
+  },
+  handleLogout: () => {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userId');
+    window.location.href = "../AuthFiles/Login.html";
+  },
+  handleReserveTable: (tableId) => {
+    if (!state.currentUser) {
+      alert('Please log in to reserve a table.');
+      window.location.href = '../AuthFiles/Login.html';
+      return;
+    }
+    window.location.href = `../Reservations/Reservation.html?tableId=${tableId}`;
+  },
+  handleAddToCart: (itemId) => {
+    if (!state.currentUser) {
+      alert('Please log in to add items to cart.');
+      window.location.href = '../AuthFiles/Login.html';
+      return;
+    }
+    // Add to cart logic here
+    console.log('Added item to cart:', itemId);
+  },
+  submitFeedback: async (e) => {
+    e.preventDefault(); // Prevent default form submission
+    
+    const feedbackText = elements.feedbackInput.value.trim();
+    
+    if (!feedbackText) {
+      alert('Please write your feedback before submitting.');
+      return;
+    }
+    
+    if (!state.currentUser) {
+      alert('Please log in to submit feedback.');
+      window.location.href = '../AuthFiles/Login.html';
+      return;
+    }
+    
+    try {
+      elements.sendBtn.disabled = true;
+      elements.sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      
+      const response = await apiService.submitFeedback(
+        state.currentUser.id, 
+        feedbackText
+      );
+      
+      if (response.status === 'success') {
+        elements.feedbackInput.value = '';
+        await loadFeedbacks();
+        showToast('Feedback submitted successfully!');
+      } else {
+        throw new Error(response.message || 'Failed to submit feedback');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      showToast(error.message, 'error');
+    } finally {
+      elements.sendBtn.disabled = false;
+      elements.sendBtn.innerHTML = 'Send <i class="fas fa-paper-plane"></i>';
+    }
+  }
+};document.addEventListener('click', (e) => {
+  if (!e.target.closest('.profile') && elements.profileActions.classList.contains('active')) {
+    elements.profileActions.classList.remove('active');
+  }
+});
+
+// Toast Notification
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.classList.add('show');
+  }, 10);
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => {
+      toast.remove();
+    }, 300);
+  }, 3000);
+}
+
+// Data Loading Functions
+async function loadMenuItems() {
+  utils.showLoader(elements.menuContainer);
+  
+  const response = await apiService.fetchMenuItems();
+  
+  if (response.status === 'success') {
+    elements.menuContainer.innerHTML = '';
+    response.menu_items.slice(0, 4).forEach(item => {
+      const card = components.createMenuCard(item);
+      elements.menuContainer.appendChild(card);
+    });
+    
+    // Add event listeners to "Add to cart" buttons
+    document.querySelectorAll('.add-to-cart').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        handlers.handleAddToCart(e.currentTarget.dataset.id);
+      });
+    });
+  } else {
+    utils.showError(elements.menuContainer, response.message);
+  }
+}
+
+async function loadTables() {
+  utils.showLoader(elements.tablesContainer);
+  
+  const response = await apiService.fetchTables();
+  
+  if (response.status === 'success') {
+    elements.tablesContainer.innerHTML = '';
+    response.tables.slice(0, 3).forEach(table => {
+      const card = components.createTableCard(table);
+      elements.tablesContainer.appendChild(card);
+    });
+    
+    // Add event listeners to reserve buttons
+    document.querySelectorAll('.reserve-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        handlers.handleReserveTable(e.currentTarget.dataset.id);
+      });
+    });
+  } else {
+    utils.showError(elements.tablesContainer, response.message);
+  }
+}
+
+async function loadFeedbacks() {
+  utils.showLoader(elements.feedbacksContainer);
+  
+  const response = await apiService.fetchFeedbacks();
+  
+  if (response.status === 'success') {
+    elements.feedbacksContainer.innerHTML = '';
+    response.feedbacks.forEach(feedback => {
+      const item = components.createFeedbackItem(feedback);
+      elements.feedbacksContainer.appendChild(item);
+    });
+  } else {
+    utils.showError(elements.feedbacksContainer, response.message);
+  }
+}
+
+// Initialize App
+function init() {
+  // Add event listeners
+  elements.sendBtn.addEventListener('click', handlers.submitFeedback);
+  elements.logoutBtn.addEventListener('click', handlers.handleLogout);
+  elements.profileBtn.addEventListener('click', () => {
+    window.location.href = '../Profile/profile.html';
+  });
+  
+  // Close profile dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.profile') && !e.target.closest('.profile-actions')) {
+      elements.profileActions.classList.remove('active');
+    }
+  });
+  
+  // Load data
+  loadMenuItems();
+  loadTables();
+  loadFeedbacks();
+  updateProfileInfo();
+
+  
+  // Add animation to sections
+  document.querySelectorAll('.section').forEach((section, index) => {
+    section.style.animationDelay = `${index * 0.1}s`;
+  });
+}
+// Start the application
+document.addEventListener('DOMContentLoaded', init);
+
+// Update user info in profile dropdown
+// Update the API_BASE to match your backend URL
+const API_BASE = 'http://localhost:5000';
+
+async function updateProfileInfo() {
+  try {
+    const userId = localStorage.getItem('userId');
+    
+    if (!userId) {
+      document.getElementById('profileUserName').textContent = 'Guest';
+      document.getElementById('profileUserEmail').textContent = '';
+      return;
+    }
+
+    const resp = await fetch(`${API_BASE}/get_profile?user_id=${userId}`);
+    const json = await resp.json();
+    
+    if (json.status === 'success') {
+      document.getElementById('profileUserName').textContent = json.profile.name || 'User';
+      document.getElementById('profileUserEmail').textContent = json.profile.email || '';
+    } else {
+      document.getElementById('profileUserName').textContent = 'User';
+      document.getElementById('profileUserEmail').textContent = '';
+      console.error('Failed to fetch profile:', json.message);
+    }
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    document.getElementById('profileUserName').textContent = 'User';
+    document.getElementById('profileUserEmail').textContent = '';
+  }
+}
+// Enhanced toggle function
+function toggleProfile() {
+  const profileActions = document.getElementById('profileActions');
+  profileActions.classList.toggle('active');
+  
+  // Close when clicking outside
+  if (profileActions.classList.contains('active')) {
+    document.addEventListener('click', closeProfileOnClickOutside);
+  } else {
+    document.removeEventListener('click', closeProfileOnClickOutside);
+  }
+}
+
+function closeProfileOnClickOutside(e) {
+  if (!e.target.closest('.profile') && !e.target.closest('.profile-actions')) {
+    document.getElementById('profileActions').classList.remove('active');
+    document.removeEventListener('click', closeProfileOnClickOutside);
+  }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+  updateProfileInfo();
+  
+  // Profile button event listeners
+  document.getElementById('prof').addEventListener('click', () => {
+    window.location.href = '../Profile/profile.html';
+  });
+  
+  document.getElementById('logOut').addEventListener('click', () => {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userId');
+    window.location.href = "../AuthFiles/Login.html";
+  });
+});

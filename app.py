@@ -140,18 +140,48 @@ def get_menu_items():
 def get_feedbacks():
     try:
         cur = conn.cursor()
-        cur.execute("SELECT UserID, feedback FROM feedbacks")
+        cur.execute("""
+            SELECT f.FeedbackID, u.Email, f.Feedback 
+            FROM Feedbacks f
+            JOIN Users u ON f.UserID = u.UserID
+            ORDER BY f.FeedbackID DESC
+        """)
         rows = cur.fetchall()
         cur.close()
 
         feedbacks = []
         for row in rows:
             feedbacks.append({
-                "UserID": row[0],
-                "feedback": row[1],
+                "FeedbackID": row[0],
+                "UserEmail": row[1],  # Show user email instead of ID
+                "feedback": row[2],
             })
 
         return jsonify({"status": "success", "feedbacks": feedbacks})
+
+    except Exception as e:
+        return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
+        
+# -------------------- ADD FEEDBACK --------------------
+@app.route('/add_feedback', methods=['POST'])
+def add_feedback():
+    try:
+        data = request.get_json()
+        user_id = data.get('user_id')
+        feedback_text = data.get('feedback')
+
+        if not user_id or not feedback_text:
+            return jsonify({"status": "fail", "message": "Missing user_id or feedback"}), 400
+
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO Feedbacks (UserID, Feedback) VALUES (%s, %s)",
+            (user_id, feedback_text)
+        )
+        conn.commit()
+        cur.close()
+
+        return jsonify({"status": "success", "message": "Feedback added successfully"})
 
     except Exception as e:
         return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
