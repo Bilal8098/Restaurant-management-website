@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
     <link rel="stylesheet" href="style.css">
-    <title>Table Reservations Calendar</title>
-</head>
-<body>
+</head><body>
     <h1>Table Reservations Calendar</h1>
     <div class="calendar-container">
         <div class="calendar-controls">
@@ -20,21 +21,22 @@
         </table>
     </div>
     <script>
-        // Utilities for padding and YYYY-MM-DD
-        function pad(n){ return n<10?'0'+n:''+n }
-        function ymd(date){
-          return date.getFullYear() + '-' +
-                 pad(date.getMonth()+1) + '-' +
-                 pad(date.getDate());
+        // helper to pad numbers to two digits
+        function pad(n){ return n < 10 ? '0'+n : ''+n; }
+      
+        // YYYY-MM-DD from a local Date
+        function ymd(d){
+          return d.getFullYear() + '-' +
+                 pad(d.getMonth() + 1) + '-' +
+                 pad(d.getDate());
         }
       
-        // Get Monday of current week at LOCAL midnight
+        // find Monday (or shift Sunday) and return local-midnight Date
         function getStartOfWeek(date){
-          const d    = new Date(date);
-          const day  = d.getDay();
-          // shift Sunday (0) back to previous Monday
-          const diff = d.getDate() - day + (day===0?-6:1);
-          const m    = new Date(d.setDate(diff));
+          const d   = new Date(date);
+          const day = d.getDay();
+          const diff= d.getDate() - day + (day===0 ? -6 : 1);
+          const m   = new Date(d.setDate(diff));
           return new Date(m.getFullYear(), m.getMonth(), m.getDate());
         }
       
@@ -43,95 +45,62 @@
       
         async function fetchReservations(){
           try {
-            const res = await fetch('http://127.0.0.1:5000/reservations', {
-              headers:{'Content-Type':'application/json'}, mode:'cors'
-            });
-            if(!res.ok) throw new Error(res.status);
-            const j = await res.json();
-            return j.data || [];
+            let r = await fetch('http://127.0.0.1:5000/reservations', { mode:'cors' });
+            let j = await r.json();
+            return (j.data||[]).map(r=>({
+              ReservationID: r.reservationid,
+              UserID:        r.userid,
+              TableID:       r.tableid,
+              startDate:     r.startdate,
+              endDate:       r.enddate,
+              Name:          r.name,
+              PhoneNumber:   r.phonenumber,
+              Status:        r.status
+            }));
           } catch(e){
-            console.error('fetchReservations', e);
+            console.error('fetchReservations',e);
             return [];
           }
         }
       
         async function fetchTables(){
           try {
-            const res = await fetch('http://127.0.0.1:5000/get_tables', {
-              headers:{'Content-Type':'application/json'}, mode:'cors'
-            });
-            if(!res.ok) throw new Error(res.status);
-            const j = await res.json();
-            return j.tables || [];
+            let r = await fetch('http://127.0.0.1:5000/get_tables', { mode:'cors' });
+            let j = await r.json();
+            return (j.tables||[]).map(t=>({ TableID: t.TableID }));
           } catch(e){
-            console.error('fetchTables', e);
+            console.error('fetchTables',e);
             return [];
           }
         }
       
-        function normalizeReservations(raw){
-          return raw.map(r=>({
-            ReservationID: r.reservationid,
-            UserID:        r.userid,
-            TableID:       r.tableid,
-            startDate:     r.startdate,
-            endDate:       r.enddate,
-            Name:          r.name,
-            PhoneNumber:   r.phonenumber,
-            Status:        r.status
-          }));
-        }
-      
-        function normalizeTables(raw){
-          return raw.map(t=>({
-            TableID: t.tableid
-          }));
-        }
-      
         function processReservations(reservations, tables, weekStart){
-          // Build weekEnd at local midnight +6 days
-          const weekEnd = new Date(
-            weekStart.getFullYear(),
-            weekStart.getMonth(),
-            weekStart.getDate() + 6
-          );
-      
-          // init empty
           const grouped = {};
-          tables.forEach(t => {
+          tables.forEach(t=>{
             grouped[t.TableID] = {};
-            for(let i=0; i<7; i++){
+            for(let i=0;i<7;i++){
               const day = new Date(
                 weekStart.getFullYear(),
                 weekStart.getMonth(),
-                weekStart.getDate() + i
+                weekStart.getDate()+i
               );
               grouped[t.TableID][ ymd(day) ] = [];
             }
           });
       
-          reservations.forEach(res => {
-            // parse into JS Date
-            const start = new Date(res.startDate);
-            const end   = new Date(res.endDate);
-            if (start >= end) return;
+          reservations.forEach(r => {
+            const s = new Date(r.startDate), e = new Date(r.endDate);
+            if(s>=e) return;
       
-            // cursor at START's local date
-            let cursor = new Date(start.getFullYear(),
-                                  start.getMonth(),
-                                  start.getDate());
-            // lastDay at END's local date
-            const lastDay = new Date(end.getFullYear(),
-                                     end.getMonth(),
-                                     end.getDate());
+            let cur = new Date(s.getFullYear(), s.getMonth(), s.getDate());
+            const last = new Date(e.getFullYear(), e.getMonth(), e.getDate());
       
-            // walk each calendar day from start→end
-            while(cursor <= lastDay){
-              const key = ymd(cursor);
-              if (grouped[res.TableID] && grouped[res.TableID][key]) {
-                grouped[res.TableID][key].push(res);
+            while(cur <= last){
+              const key = ymd(cur);
+              if(grouped[r.TableID] && grouped[r.TableID][key]){
+                grouped[r.TableID][key].push(r);
               }
-              cursor.setDate(cursor.getDate() + 1);
+              cur.setDate(cur.getDate()+1);
             }
           });
       
@@ -139,51 +108,71 @@
         }
       
         function renderCalendar(weekStart, grouped, tables){
-          // Build 7‐day array
+          // build the 7 days
           const days = [];
           for(let i=0;i<7;i++){
             days.push(new Date(
               weekStart.getFullYear(),
               weekStart.getMonth(),
-              weekStart.getDate() + i
+              weekStart.getDate()+i
             ));
           }
       
-          // Header
+          // render header
           document.getElementById('calendar-header').innerHTML =
             '<th>Table</th>' +
             days.map(d=>
               `<th>${d.toLocaleDateString('en-US',{weekday:'short'})}<br>${d.getDate()}</th>`
             ).join('');
       
-          // Body
+          // render body
           const tbody = document.getElementById('calendar-body');
           tbody.innerHTML = '';
-          tables
-            .sort((a,b)=>a.TableID-b.TableID)
-            .forEach(t=>{
-              const tr = document.createElement('tr');
-              tr.innerHTML = `<td>Table ${t.TableID}</td>`;
-              days.forEach(d=>{
-                const cell = document.createElement('td');
-                const list = (grouped[t.TableID]||{})[ymd(d)]||[];
-                list.forEach(res=>{
-                  const s = new Date(res.startDate).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-                  const e = new Date(res.endDate).toLocaleTimeString([],   {hour:'2-digit',minute:'2-digit'});
-                  const div = document.createElement('div');
-                  div.className = 'reservation-item';
-                  div.innerHTML = `
-                    <div>🕒 ${s} - ${e}</div>
-                    <div>👤 ${res.Name||'—'}</div>
-                    <div>📞 ${res.PhoneNumber||'—'}</div>
-                    <div>🟢 ${res.Status}</div>
-                  `;
-                  cell.appendChild(div);
-                });
-                tr.appendChild(cell);
+      
+          tables.sort((a,b)=>a.TableID-b.TableID)
+                .forEach(t => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>Table ${t.TableID}</td>`;
+      
+            days.forEach(d => {
+              const cell = document.createElement('td');
+              let list = (grouped[t.TableID]||{})[ymd(d)] || [];
+      
+              // sort by start time:
+              list.sort((a,b)=> new Date(a.startDate) - new Date(b.startDate));
+      
+              // if you want to cap visible items, you could slice() here
+      
+              list.forEach((r, idx, arr) => {
+                const start = new Date(r.startDate)
+                                .toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+                const end   = new Date(r.endDate)
+                                .toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+                const slot  = document.createElement('div');
+      
+                slot.className = 'reservation-item';
+                // side-by-side layout:
+                slot.style.display      = 'inline-block';
+                slot.style.verticalAlign= 'top';
+                slot.style.width        = `${100/arr.length}%`;
+                slot.style.boxSizing    = 'border-box';
+                slot.style.padding      = '4px';
+                slot.style.margin       = '2px 0';
+      
+                slot.innerHTML = `
+                  <div>🕒 ${start} - ${end}</div>
+                  <div>👤 ${r.Name||'—'}</div>
+                  <div>📞 ${r.PhoneNumber||'—'}</div>
+                  <div>🟢 ${r.Status}</div>
+                `;
+                cell.appendChild(slot);
               });
-              tbody.appendChild(tr);
+      
+              tr.appendChild(cell);
             });
+      
+            tbody.appendChild(tr);
+          });
         }
       
         function updateWeekRange(){
@@ -207,16 +196,19 @@
       
         async function loadCalendar(){
           updateWeekRange();
-          const [rawR, rawT] = await Promise.all([fetchReservations(), fetchTables()]);
-          const reservations = normalizeReservations(rawR);
-          const tables       = normalizeTables(rawT);
-          const grouped      = processReservations(reservations, tables, currentWeekStart);
+          const [ reservations, tables ] = await Promise.all([
+            fetchReservations(),
+            fetchTables()
+          ]);
+          const grouped = processReservations(reservations, tables, currentWeekStart);
           renderCalendar(currentWeekStart, grouped, tables);
         }
       
+        // initial draw
         loadCalendar();
         window.addEventListener('beforeunload', ()=>clearInterval(refreshInterval));
       </script>
+      
       
 </body>
 </html>

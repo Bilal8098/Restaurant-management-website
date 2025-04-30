@@ -1,3 +1,13 @@
+function toggleProfile() {
+  const box = document.getElementById('profileActions');
+  box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
+}
+
+function toggleNav() {
+  const navLinks = document.getElementById('navLinks');
+  navLinks.classList.toggle('active');
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   fetchMenuItems();
 });
@@ -46,4 +56,3 @@ function fetchMenuItems() {
       console.error('Error fetching menu:', error);
     });
 }
-
