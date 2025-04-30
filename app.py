@@ -315,6 +315,19 @@ def delete_table():
     else:
         return jsonify({"status": "error", "message": f"Table {table_id} not found."}), 404
         
+#-------------------------------Edit Price--------------------------
+@app.route('/update_price', methods=['POST'])
+def update_price():
+    data = request.get_json()
+    name = data.get('name')
+    new_price = data.get('price')
+
+    if name in menu_items:
+        menu_items[name] = new_price
+        return jsonify({"status": "success", "message": f"Price of '{name}' updated to {new_price}."})
+    else:
+        return jsonify({"status": "error", "message": f"Item '{name}' not found."}), 404
+
 #-----------------------MAIN-------------------------
 if __name__ == '__main__':
     app.run(debug=True)
