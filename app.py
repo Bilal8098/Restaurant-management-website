@@ -291,6 +291,17 @@ def get_profile():
 
 #     return jsonify({'status': 'success'})
 
-# -------------------- MAIN --------------------
+# -------------------- delete menu --------------------
+@app.route('/delete_menu_item', methods=['POST'])
+def delete_menu_item():
+    data = request.get_json()
+    name = data.get('name')
+
+    if name in menu_items:
+        del menu_items[name]
+        return jsonify({"status": "success", "message": f"Item '{name}' deleted."})
+    else:
+        return jsonify({"status": "error", "message": f"Item '{name}' not found."}), 404
+#-----------------------MAIN-------------------------
 if __name__ == '__main__':
     app.run(debug=True)
