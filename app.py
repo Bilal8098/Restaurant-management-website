@@ -326,20 +326,26 @@ def get_profile():
 @app.route('/delete_menu_item', methods=['POST'])
 def delete_menu_item():
     data = request.get_json()
-    name = data.get('name')
+    item_id = data.get('id')
 
     cur = conn.cursor()
-    cur.execute("SELECT * FROM menu WHERE name = %s", (name,))
+    cur.execute("SELECT * FROM Menu WHERE ItemID = %s", (item_id,))
     item = cur.fetchone()
 
     if item:
-        cur.execute("DELETE FROM menu WHERE name = %s", (name,))
+        cur.execute("DELETE FROM Menu WHERE ItemID = %s", (item_id,))
         conn.commit()
-        conn.close()
-        return jsonify({"status": "success", "message": f"Item '{name}' deleted."})
+        cur.close()
+        return jsonify({
+            "status": "success", 
+            "message": f"Item ID '{item_id}' deleted."
+        })
     else:
-        conn.close()
-        return jsonify({"status": "error", "message": f"Item '{name}' not found."}), 404
+        cur.close()
+        return jsonify({
+            "status": "error", 
+            "message": f"Item ID '{item_id}' not found."
+        }), 404
 
 #-----------------------delete table-------------------------
 @app.route('/delete_table', methods=['POST'])
@@ -367,21 +373,30 @@ def delete_table():
 @app.route('/update_price', methods=['POST'])
 def update_price():
     data = request.get_json()
-    name = data.get('name')
+    item_id = data.get('id')
     new_price = data.get('price')
 
     cur = conn.cursor()
-    cur.execute("SELECT * FROM menu WHERE name = %s", (name,))
+    cur.execute("SELECT * FROM Menu WHERE ItemID = %s", (item_id,))
     item = cur.fetchone()
 
     if item:
-        cur.execute("UPDATE menu SET price = %s WHERE name = %s", (new_price, name))
+        cur.execute(
+            "UPDATE Menu SET Price = %s WHERE ItemID = %s",
+            (new_price, item_id)
+        )
         conn.commit()
-        conn.close()
-        return jsonify({"status": "success", "message": f"Price of '{name}' updated to {new_price}."})
+        cur.close()
+        return jsonify({
+            "status": "success", 
+            "message": f"Price of item ID '{item_id}' updated to {new_price}."
+        })
     else:
-        conn.close()
-        return jsonify({"status": "error", "message": f"Item '{name}' not found."}), 404
+        cur.close()
+        return jsonify({
+            "status": "error", 
+            "message": f"Item ID '{item_id}' not found."
+        }), 404
 #-----------------------getReservations--------------
 @app.route('/reservations', methods=['GET'])
 def get_reservations():

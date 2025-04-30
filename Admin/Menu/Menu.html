@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="Menu.css">
+  <title>Menu</title>
+</head>
+<body>
+  <h1 style="color: white;">Menu</h1>
+  <div class="scroll-wrapper">
+    <div class="menu-grid" id="menu-grid">
+      <!-- items inserted by JS -->
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" style="
+  display: none;
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+  background: #2c3e50;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+"></div>
+
+<!-- MODAL OVERLAY -->
+<div id="modalOverlay" style="
+  display: none;
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+">
+<div id="modalBox" style="
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    min-width: 300px;
+    max-width: 400px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+">
+ <h2 id="modalTitle" style="
+      margin: 0 0 1.5rem 0;
+      color: #2c3e50;
+      font-size: 1.5rem;
+ ">Update Price</h2>
+ <input id="modalInput" type="number" step="0.01" style="
+      width: 100%;
+      padding: 0.8rem;
+      margin: 0 0 1.5rem 0;
+      border: 2px solid #eee;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+ ">
+ <div style="
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+ ">
+   <button onclick="closeModal()" style="
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 25px;
+        background: #f0f0f0;
+        color: #666;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+   ">Cancel</button>
+   <button id="modalConfirm" style="
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 25px;
+        background: #27ae60;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+   ">Confirm</button>
+ </div>
+</div>
+</div>
+
+  <!-- your script should come after these elements -->
+  <script src="Menu.js"></script>
+</body>
+</html>
