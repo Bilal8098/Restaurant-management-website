@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Item Price</title>
+  <link rel="stylesheet" href="editPrice.css">
+</head>
+<body>
+  <div class="imgDiv">
+    <img src="C:\Users\NTG\Desktop\httt\.vscode\Edit menu\appIcon-noBackground.png" class="ico" />
+  </div>
+
+  <div class="h1Div">
+    <h1>Edit Item Price</h1>
+  </div>
+
+  <div class="add">
+    <div class="topIconDiv">
+      <img src="C:\Users\NTG\Desktop\httt\.vscode\Edit menu\addIcon.png" class="topIcon" />
+    </div>
+
+    <div class="h1Div2">
+      <h2>Enter item name and new price</h2>
+    </div>
+
+    <div class="fields">
+      <input type="text" id="itemName" placeholder="Item Name" required>
+      <input type="number" id="newPrice" placeholder="New Price" required>
+    </div>
+
+    <button onclick="editPrice()" class="butt">Update</button>
+  </div>
+
+  <script>
+    function editPrice() {
+      const itemName = document.getElementById('itemName').value;
+      const newPrice = document.getElementById('newPrice').value;
+      if (!itemName || !newPrice) return alert("Please fill in all fields.");
+      fetch('http://localhost:5000/update_price', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: itemName, price: newPrice })
+      })
+      .then(res => res.json())
+      .then(data => alert(data.message))
+      .catch(err => alert("Error: " + err));
+    }
+  </script>
+</body>
+</html>
