@@ -6,29 +6,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tables</title>
   <link rel="stylesheet" href="Tables.css" />
-  <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/x-icon">
-  <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/png">
-  <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="32x32">
-  <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="192x192">
+  <link rel="icon" href="../../assets/appIcon-noBackground.png" type="image/x-icon">
+  <!-- Removed duplicate icon links for brevity -->
 </head>
 
 <body>
   <div class="container">
     <div class="header">
-      <img src="../assets/appIcon-noBackground.png" alt="icon" class="header-icon" />
+      <img src="../../assets/appIcon-noBackground.png" alt="icon" class="header-icon" />
       <h1>Tables</h1>
     </div>
+    
+    <!-- Image Preview Modal -->
     <div id="image-modal" class="modal">
       <span class="close">&times;</span>
       <img class="modal-content" id="preview-img">
     </div>
-    <div class="tables" id="tables-container">
-      <!-- Table cards will be inserted here dynamically -->
-    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal">
+      <div class="confirmation-box">
+          <h3>Confirm Delete</h3>
+          <p>Are you sure you want to delete this table?</p>
+          <div class="modal-buttons">
+              <button id="cancel-delete" class="modal-cancel">Cancel</button>
+              <button id="confirm-delete" class="modal-confirm">Delete</button>
+          </div>
+      </div>
   </div>
 
-  <script src="Table.js">
-  </script>
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loading-spinner">
+      <div class="spinner"></div>
+    </div>
+
+    <div class="tables" id="tables-container">
+      <!-- Skeleton Loaders -->
+      <div class="table-card skeleton"></div>
+      <div class="table-card skeleton"></div>
+    </div>
+
+    <!-- Floating Add Button -->
+   <a href="Adding/addTable.html">
+    <button class="float-btn" id="add-table-btn">
+      <span>+</span>
+    </button>
+   </a>
+  </div>
+
+  <script src="Table.js"></script>
 </body>
 
 </html>

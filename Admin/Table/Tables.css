@@ -4,6 +4,25 @@ body {
     background:  #FF5E00;
     background-attachment: fixed;
   }
+  .delete-btn {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    margin-top: 8px;
+  }
+  
+  .delete-btn:hover {
+    background: linear-gradient(135deg, #cc0000, #aa0000);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  }
   
   .container {
     padding: 10px 10px;
@@ -298,4 +317,168 @@ body {
 ::-webkit-scrollbar-track {
   background-color: #f1f1f1;  /* Optional: track color */
   border-radius: 10px;
+}
+
+/* Tables.css */
+/* Base styles remain the same, here are the enhancements */
+
+/* Floating Action Button */
+.float-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B00, #FF4500);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(255, 107, 0, 0.4);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.float-btn:hover {
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 12px 30px rgba(255, 107, 0, 0.6);
+}
+
+/* Skeleton Loading */
+.skeleton {
+  animation: skeleton-loading 1.5s infinite linear;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 25%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0.1) 75%
+  );
+  background-size: 400% 100%;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+.loading-spinner {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #FF6B00;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Delete Confirmation Modal */
+#delete-modal .confirmation-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 400px;
+  margin: 20vh auto;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.modal-cancel, .modal-confirm {
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-cancel {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.modal-confirm {
+  background: linear-gradient(135deg, #ff4444, #cc0000);
+  color: white;
+}
+
+/* Card Hover Enhancement */
+.table-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tables {
+    grid-template-columns: 1fr;
+  }
+  
+  .table-card {
+    width: 80%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .table-card img {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .table-name {
+    font-size: 1.1rem;
+  }
+}
+
+/* Ripple Effect */
+.delete-btn, .modal-confirm {
+  position: relative;
+  overflow: hidden;
+}
+
+.delete-btn:after, .modal-confirm:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(50);
+  }
 }

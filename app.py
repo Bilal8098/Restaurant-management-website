@@ -328,13 +328,12 @@ def delete_menu_item():
     data = request.get_json()
     name = data.get('name')
 
-    conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM menu WHERE name = ?", (name,))
+    cur.execute("SELECT * FROM menu WHERE name = %s", (name,))
     item = cur.fetchone()
 
     if item:
-        cur.execute("DELETE FROM menu WHERE name = ?", (name,))
+        cur.execute("DELETE FROM menu WHERE name = %s", (name,))
         conn.commit()
         conn.close()
         return jsonify({"status": "success", "message": f"Item '{name}' deleted."})
@@ -348,19 +347,21 @@ def delete_table():
     data = request.get_json()
     table_id = data.get('table_id')
 
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM tables WHERE id = ?", (table_id,))
-    table = cur.fetchone()
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM tables WHERE TableID = %s", (table_id,))
+        table = cur.fetchone()
 
-    if table:
-        cur.execute("DELETE FROM tables WHERE id = ?", (table_id,))
-        conn.commit()
-        conn.close()
-        return jsonify({"status": "success", "message": f"Table {table_id} deleted."})
-    else:
-        conn.close()
-        return jsonify({"status": "error", "message": f"Table {table_id} not found."}), 404
+        if table:
+            cur.execute("DELETE FROM tables WHERE TableID = %s", (table_id,))
+            conn.commit()
+            cur.close()
+            return jsonify({"status": "success", "message": f"Table {table_id} deleted."})
+        else:
+            cur.close()
+            return jsonify({"status": "error", "message": f"Table {table_id} not found."}), 404
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 #-------------------------------Edit Price--------------------------
 @app.route('/update_price', methods=['POST'])
@@ -369,13 +370,12 @@ def update_price():
     name = data.get('name')
     new_price = data.get('price')
 
-    conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM menu WHERE name = ?", (name,))
+    cur.execute("SELECT * FROM menu WHERE name = %s", (name,))
     item = cur.fetchone()
 
     if item:
-        cur.execute("UPDATE menu SET price = ? WHERE name = ?", (new_price, name))
+        cur.execute("UPDATE menu SET price = %s WHERE name = %s", (new_price, name))
         conn.commit()
         conn.close()
         return jsonify({"status": "success", "message": f"Price of '{name}' updated to {new_price}."})
