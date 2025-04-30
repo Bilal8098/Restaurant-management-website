@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Delete Table</title>
+  <link rel="stylesheet" href="deleteTable.css">
+</head>
+<body>
+  <div class="imgDiv">
+    <img src="C:\Users\NTG\Desktop\httt\.vscode\delete Menu\appIcon-noBackground.png" class="ico" />
+  </div>
+
+  <div class="h1Div">
+    <h1>Delete Table</h1>
+  </div>
+
+  <div class="add">
+    <div class="topIconDiv">
+      <img src="C:\Users\NTG\Desktop\httt\.vscode\delete table\addIcon.png" class="topIcon" />
+    </div>
+
+    <div class="h1Div2">
+      <h2>Enter table ID and name to delete</h2>
+    </div>
+
+    <div class="fields">
+      <input type="number" id="tableId" placeholder="Table ID" required>
+      <input type="text" id="customerName" placeholder="Customer Name" required>
+    </div>
+
+    <button onclick="deleteTable()" class="butt">Delete</button>
+  </div>
+
+  <script>
+    function deleteTable() {
+      const tableId = document.getElementById('tableId').value;
+      const customerName = document.getElementById('customerName').value;
+
+      if (!tableId || !customerName) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      fetch('http://localhost:5000/delete_table', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          table_id: tableId,
+          name: customerName
+        })
+      })
+      .then(res => res.json())
+      .then(data => alert(data.message))
+      .catch(err => alert("Error: " + err));
+    }
+  </script>
+</body>
+</html>
