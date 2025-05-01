@@ -5,71 +5,137 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Akalaty</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="homepageStyle.css">
   <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/x-icon">
 </head>
 <body>
+  <div id="loader">
+        <div class="grid-loader">
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+        </div>
+      </div>
+      
+  
   <div class="container">
+    <!-- Animated Background Elements -->
+    <div class="bg-blur"></div>
+    <div class="bg-blur"></div>
+    
     <header>
-      <div class="brand">Akalaty</div>
+      <div class="brand">
+        <span class="gradient-text">Akalaty</span>
+        <div class="brand-sub">Premium Dining Experience</div>
+      </div>
+      
       <div class="search">
-        <input type="text" placeholder="Search..." />
-        <button><i class="fas fa-search"></i></button>
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search menu items..." />
       </div>
-<ul class="ul">
-  <li><a href="../Menu/Menu.html">Menu</a></li>
-  <li><a href="../Table/Tables.html">Tables</a></li>
-</ul>
-      <div class="header-icons">
-        <i class="fas fa-check"></i>
-        <i class="fas fa-user" onclick="toggleProfile()"></i>
-      </div>
-      <div class="profile-actions" id="profileActions">
-        <button id="prof">Edit Profile</button>
-        <button id="logOut">Logout</button>
+
+      <nav class="nav-links">
+        <ul>
+          <li><a href="../Menu/Menu.html" class="hover-underline" style="text-decoration: none;  margin-right: 50px;">Menu</a></li>
+          <li><a href="../Table/Tables.html" class="hover-underline" style="text-decoration: none; margin-right: 100px;">Tables</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions" >
+        <div class="profile" onclick="toggleProfile()"  >
+          <i class="fas fa-user-circle"></i>
+          <div class="profile-actions" id="profileActions">
+            <div class="user-info">
+              <div class="user-name" id="profileUserName">John Doe</div>
+              <div class="user-email" id="profileUserEmail">john@example.com</div>
+            </div>
+            <button class="profile-btn" id="prof">
+              <i class="fas fa-user-edit"></i> Edit Profile
+            </button>
+            <button class="profile-btn" id="logOut">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </div>
+        </div>
       </div>
     </header>
 
-    <!-- Most Ordered Section -->
-    <div class="section-header">
-      <div class="section-title">Most ordered</div>
-    </div>
-    <div class="imaArrow">
-      <div class="ordered-images" id="menuContainer">
-        <!-- JS will inject menu items here -->
-      </div>
-      <div class="more-arrow" onclick="gotoMenu()">More</div>
-    </div>
+    <!-- Main Content -->
+    <main>
+      <!-- Most Ordered Section -->
+      <section class="section animate-slide-up">
+        <div class="section-header">
+          <h2 class="section-title">Most Ordered 🔥</h2>
+   <a href="../Menu/Menu.html">
+           <button class="see-all">
+            See All <i class="fas fa-arrow-right"></i>
+          </button>
+   </a>
+        </div>
+        <div class="card-grid" id="menuContainer"></div>
+      </section>
 
-    <!-- Tables Section -->
-    <div class="section-header">
-      <div class="section-title">View our tables</div>
-    </div>
-<div class="imaArrow">
-  <div class="tables" id="tablesContainer">
-    <!-- JS will inject tables here -->
-  </div>
-  <div class="more-arrow" onclick="gotoTables()">More</div>
-</div>
-<div class="section-header">
-  <div class="section-title">Customer Feedback</div>
-</div>
-    <div class="comment">
-      <i class="fas fa-user"></i>
-      <input type="text" placeholder="Write a comment..." />
-      <button class="send-btn"><i class="fas fa-paper-plane"></i></button>
-    </div>
-    <div class="feedbacks" id="feedbacksContainer">
-      <!-- JS will inject feedbacks here -->
-    </div>
-    
-    <div class="social-icons">
-      <i class="fab fa-x-twitter"></i>
-      <i class="fab fa-facebook"></i>
-      <i class="fab fa-instagram"></i>
-      <i class="fab fa-tiktok"></i>
-    </div>
+      <!-- Tables Section -->
+      <section class="section animate-slide-up">
+        <div class="section-header">
+          <h2 class="section-title">Premium Tables ✨</h2>
+<a href="../Table/Tables.html">
+  <button class="see-all">
+    See All <i class="fas fa-arrow-right"></i>
+  </button>
+</a>
+        </div>
+        <div class="card-grid" id="tablesContainer"></div>
+      </section>
+
+      <!-- Feedback Section -->
+      <section class="section animate-slide-up">
+        <div class="section-header">
+          <h2 class="section-title">Customer Voices 🗣️</h2>
+        </div>
+        <div class="feedback-input">
+          <div class="user-avatar">
+            <i class="fas fa-user-edit"></i>
+          </div>
+          <div class="input-container">
+            <input type="text" placeholder="Share your experience..." />
+            <button class="send-btn" onclick="submitFeedback()">
+              Send <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+        <br>
+        <div class="feedbacks" id="feedbacksContainer"></div>
+      </section>
+    </main>
+
+    <!-- Social Footer -->
+    <footer class="social-footer">
+      <div class="social-container">
+        <h3>Connect With Us</h3>
+        <div class="social-icons">
+          <a href="#" class="social-icon twitter">
+            <i class="fab fa-x-twitter"></i>
+          </a>
+          <a href="#" class="social-icon facebook">
+            <i class="fab fa-facebook"></i>
+          </a>
+          <a href="#" class="social-icon instagram">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="social-icon tiktok">
+            <i class="fab fa-tiktok"></i>
+          </a>
+        </div>
+      </div>
+    </footer>
   </div>
   <script src="homeScript.js"></script>
 </body>

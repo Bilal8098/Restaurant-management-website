@@ -19,14 +19,18 @@
   document.querySelector("button").addEventListener("click", function (e) {
     e.preventDefault();
 
-    const data = {
-      user_id: document.getElementById('user_id').value,
-      table_id: document.getElementById('table_id').value,
-      start_date: document.getElementById('start_date').value,
-      start_time: document.getElementById('start_time').value,
-      end_date: document.getElementById('end_date').value,
-      end_time: document.getElementById('end_time').value
-    };
+// inside your click handler, extend the data object:
+const data = {
+  user_id: document.getElementById('user_id').value,
+  table_id: document.getElementById('table_id').value,
+  name: document.getElementById('name').value,
+  phone_number: document.getElementById('phone_number').value,
+  start_date: document.getElementById('start_date').value,
+  start_time: document.getElementById('start_time').value,
+  end_date: document.getElementById('end_date').value,
+  end_time: document.getElementById('end_time').value
+};
+
 
     fetch("http://localhost:5000/reserve", {
       method: "POST",

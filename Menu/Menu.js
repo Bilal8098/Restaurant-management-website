@@ -13,6 +13,13 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
+document.addEventListener('DOMContentLoaded', () => {
+      
+        document.getElementById("loader").style.display = "none";
+        document.querySelector(".container").style.display = "block";
+      }, 
+    );
+
 function fetchMenuItems() {
   fetch('http://localhost:5000/get_menu_items')
     .then(response => response.json())

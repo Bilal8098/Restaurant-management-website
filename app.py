@@ -2,10 +2,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import psycopg2
 import base64
-from io import BytesIO
-from PIL import Image
-import io
-
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'secretKey123'
@@ -140,97 +139,206 @@ def get_menu_items():
 def get_feedbacks():
     try:
         cur = conn.cursor()
-        cur.execute("SELECT UserID, feedback FROM feedbacks")
+        cur.execute("""
+            SELECT f.FeedbackID, u.Email, f.Feedback 
+            FROM Feedbacks f
+            JOIN Users u ON f.UserID = u.UserID
+            ORDER BY f.FeedbackID DESC
+        """)
         rows = cur.fetchall()
         cur.close()
 
         feedbacks = []
         for row in rows:
             feedbacks.append({
-                "UserID": row[0],
-                "feedback": row[1],
+                "FeedbackID": row[0],
+                "UserEmail": row[1],  # Show user email instead of ID
+                "feedback": row[2],
             })
 
         return jsonify({"status": "success", "feedbacks": feedbacks})
 
     except Exception as e:
         return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
+        
+# -------------------- ADD FEEDBACK --------------------
+@app.route('/add_feedback', methods=['POST'])
+def add_feedback():
+    try:
+        data = request.get_json()
+        user_id = data.get('user_id')
+        feedback_text = data.get('feedback')
 
-# -------------------- ADD FEEDBACKS --------------------
-# @app.route('/add_feedback', methods=['POST'])
-# def add_feedback():
-#     try:
-#         location = request.form.get('Location')
-#         number_of_seats = request.form.get('NumberOfSeats')
-#         status = request.form.get('Status', 'Available')
-#         image_data = request.form.get('Image')
+        if not user_id or not feedback_text:
+            return jsonify({"status": "fail", "message": "Missing user_id or feedback"}), 400
 
-#         if image_data:
-#             image_data = base64.b64decode(image_data)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO Feedbacks (UserID, Feedback) VALUES (%s, %s)",
+            (user_id, feedback_text)
+        )
+        conn.commit()
+        cur.close()
 
-#         cur = conn.cursor()
-#         cur.execute(
-#             "INSERT INTO Tables (Location, Image, NumberOfSeats, Status) VALUES (%s, %s, %s, %s)",
-#             (location, image_data, number_of_seats, status)
-#         )
-#         conn.commit()
-#         cur.close()
+        return jsonify({"status": "success", "message": "Feedback added successfully"})
 
-#         return jsonify({"status": "success", "message": "Table added successfully"})
+    except Exception as e:
+        return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
 
-#     except Exception as e:
-#         return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
+#---------------------Email sender-------------------------
+def send_confirmation_email(to_email, name, start_datetime, end_datetime):
+    from_email = "reddivel8098@gmail.com"
+    from_password = "hvcr dnym pfff olzs"
+
+    msg = MIMEMultipart()
+    msg['From'] = from_email
+    msg['To'] = to_email
+    msg['Subject'] = 'Reservation Confirmation'
+
+    # HTML email body with styling
+    body = f"""
+    <html>
+      <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #F8F9FA;">
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+          <!-- Header -->
+          <div style="background: linear-gradient(135deg, #FF5E00, #FF8C42); padding: 30px; border-radius: 8px 8px 0 0; text-align: center;">
+            <h1 style="color: #FFFFFF; margin: 0; font-size: 24px;">Reservation Confirmed!</h1>
+          </div>
+
+          <!-- Content -->
+          <div style="background: #FFFFFF; padding: 30px; border-radius: 0 0 8px 8px; border: 1px solid #e0e0e0;">
+            <p style="color: #2A2A2A; font-size: 16px;">Hello {name},</p>
+            <p style="color: #2A2A2A; font-size: 16px;">Your reservation has been successfully made. Details below:</p>
+
+            <div style="margin: 25px 0; padding: 20px; background-color: #F8F9FA; border-radius: 8px;">
+              <p style="color: #2A2A2A; margin: 10px 0; font-size: 15px;">
+                <span style="color: #FF3D00; font-weight: bold;">📅</span> Start: {start_datetime}
+              </p>
+              <p style="color: #2A2A2A; margin: 10px 0; font-size: 15px;">
+                <span style="color: #FF3D00; font-weight: bold;">📅</span> End: {end_datetime}
+              </p>
+              <p style="color: #2A2A2A; margin: 10px 0; font-size: 15px;">
+              </p>
+            </div>
+
+            <p style="color: #2A2A2A; font-size: 16px; margin-top: 25px;">
+              Thank you for choosing our reservation service.<br>
+              We look forward to serving you!
+            </p>
+          </div>
+
+          <!-- Footer -->
+          <div style="text-align: center; padding: 20px; color: #2A2A2A; font-size: 12px;">
+            <p>This is an automated message - please do not reply directly</p>
+          </div>
+        </div>
+      </body>
+    </html>
+    """
+
+    msg.attach(MIMEText(body, 'html'))  # Changed to HTML
+
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(from_email, from_password)
+        server.send_message(msg)
+        server.quit()
+        print(f"Email is successfully sent!! to: {to_email}")
+    except Exception as e:
+        print("Failed to send email:", str(e))
 
 @app.route('/reserve', methods=['POST'])
 def reserve():
     data = request.get_json()
-    user_id = data.get('user_id')          # <-- we need user_id (integer)
-    table_id = data.get('table_id')         # <-- we need table_id (integer)
-    start_date = data.get('start_date')     # expected format: 'YYYY-MM-DD'
-    start_time = data.get('start_time')     # expected format: 'HH:MM:SS'
-    end_date = data.get('end_date')
-    end_time = data.get('end_time')
 
+    # required fields
+    user_id      = data.get('user_id')          # integer
+    table_id     = data.get('table_id')         # integer
+    name         = data.get('name')             # string
+    phone_number = data.get('phone_number')     # string
+    start_date   = data.get('start_date')       # 'YYYY-MM-DD'
+    start_time   = data.get('start_time')       # 'HH:MM:SS'
+    end_date     = data.get('end_date')         
+    end_time     = data.get('end_time')
+
+    # validate presence
+    if not all([user_id, table_id, name, phone_number, start_date, start_time, end_date, end_time]):
+        return jsonify({
+            'status': 'fail',
+            'message': 'Missing one or more required fields: user_id, table_id, name, phone_number, start_date, start_time, end_date, end_time'
+        }), 400
+
+    # build timestamps
     start_datetime = f"{start_date} {start_time}"
-    end_datetime = f"{end_date} {end_time}"
+    end_datetime   = f"{end_date} {end_time}"
 
     try:
         cur = conn.cursor()
-
-        # Check if the table is already reserved in the given time
+        email_query = "SELECT Email FROM Users WHERE UserID = %s"
+        cur.execute(email_query, (user_id,))
+        result = cur.fetchone()
+        if not result:
+            return jsonify({
+                'status': 'fail',
+                'message': 'User not found'
+            }), 404
+        email = result[0]
+        # check for overlap
         check_sql = """
-            SELECT * FROM Reservations
-            WHERE TableID = %s AND (
-                (startDate < %s AND endDate > %s)
-            )
+            SELECT 1
+              FROM Reservations
+             WHERE TableID = %s
+               AND startDate < %s
+               AND endDate   > %s
         """
         cur.execute(check_sql, (table_id, end_datetime, start_datetime))
-        result = cur.fetchone()
+        if cur.fetchone():
+            return jsonify({
+                'status': 'fail',
+                'message': 'This table is already reserved during that time window'
+            }), 409
 
-        if result:
-            cur.close()
-            return jsonify({'status': 'fail', 'message': 'This table is already reserved at that time'}), 409
-
-        # Insert the reservation
+        # insert full record
         insert_sql = """
-            INSERT INTO Reservations (UserID, TableID, startDate, endDate, Status)
-            VALUES (%s, %s, %s, %s, %s)
+            INSERT INTO Reservations
+                (UserID, TableID, startDate, endDate, Status, PhoneNumber, Name)
+            VALUES
+                (%s, %s, %s, %s, %s, %s, %s)
         """
-        values = (user_id, table_id, start_datetime, end_datetime, 'Pending')
-        cur.execute(insert_sql, values)
+        cur.execute(insert_sql, (
+            user_id,
+            table_id,
+            start_datetime,
+            end_datetime,
+            'Pending',
+            phone_number,
+            name
+        ))
         conn.commit()
-        cur.close()
-
-        return jsonify({'status': 'success', 'message': 'Reservation saved successfully'})
+        send_confirmation_email(email, name, start_datetime, end_datetime)
+        return jsonify({
+            'status': 'success',
+            'message': 'Reservation saved successfully'
+        }), 200
 
     except Exception as e:
-        return jsonify({'status': 'fail', 'message': f'Error: {str(e)}'}), 500
+        conn.rollback()
+        return jsonify({
+            'status': 'fail',
+            'message': f'Error: {str(e)}'
+        }), 500
+
+    finally:
+        cur.close()
+
 
 # -------------------- SIGN UP --------------------
 @app.route('/signup', methods=['POST'])
 def signup():
-    email = request.form.get('email')
-    password = request.form.get('password')
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
 
     # Check if the email is already in use
     cur = conn.cursor()
@@ -291,17 +399,6 @@ def get_profile():
 
 #     return jsonify({'status': 'success'})
 
-# -------------------- delete menu --------------------
-@app.route('/delete_menu_item', methods=['POST'])
-def delete_menu_item():
-    data = request.get_json()
-    name = data.get('name')
-
-    if name in menu_items:
-        del menu_items[name]
-        return jsonify({"status": "success", "message": f"Item '{name}' deleted."})
-    else:
-        return jsonify({"status": "error", "message": f"Item '{name}' not found."}), 404
-#-----------------------MAIN-------------------------
+# -------------------- MAIN --------------------
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View reservaions</title>
+    <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/x-icon">
+    <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/png">
+    <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="32x32">
+    <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="192x192">
+    <link rel="stylesheet" href="style.css">
+</head><body>
+    <h1>Table Reservations Calendar</h1>
+    <div class="calendar-container">
+        <div class="calendar-controls">
+            <button id="prev-week">◀ Previous</button>
+            <span id="week-range"></span>
+            <button id="next-week">Next ▶</button>
+        </div>
+        <div class="calendar-animation-wrapper">
+            <table class="calendar-table">
+                <thead>
+                    <tr id="calendar-header"></tr>
+                </thead>
+                <tbody id="calendar-body"></tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

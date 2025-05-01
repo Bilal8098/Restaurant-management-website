@@ -1,80 +1,149 @@
-body{
-    background-color: #FF5E00;
-}
-*{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-h1{
-    color: white;
-}
-.welc{
-    display: flex;
-    justify-content: center;
-    font-size: 25px;
+body {
+  background: linear-gradient(135deg, #FF5E00, #FF3C00);
+  min-height: 100vh;
 }
 
- .add-card {
+* {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.welc {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+h1 {
+  color: white;
+  font-size: 2.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  justify-content: center;
+}
+
+.men {
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.men:hover {
+  transform: translateY(-5px);
+}
+
+.add-card {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #fff3e0, #ffcc80);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
-  width: 250px;
-  height: 250px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  height: 300px;
   cursor: pointer;
-  scroll-snap-align: start;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  overflow: hidden;
+  width: 500px;
+  width: 100%; /* Changed from fixed 500px */
+  max-width: 400px; /* Added max-width */
+  margin: 0 auto;
+}
+
+.add-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+}
+
+.add-card:hover::before {
+  animation: shine 1.5s;
+}
+
+@keyframes shine {
+  0% { left: -50%; }
+  100% { left: 150%; }
 }
 
 .add-card:hover {
-  transform: scale(1.07);
-  box-shadow: 0 10px 25px rgba(255, 111, 0, 0.25);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
 .add-card img {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 12px;
-  border-radius: 50%;
-  border: 3px solid #ff9800;
-  background-color: #fff3e0;
-  padding: 4px;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1.5rem;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(255, 94, 0, 0.2));
   transition: transform 0.3s ease;
 }
 
 .add-card:hover img {
-  transform: scale(1.1);
+  transform: scale(1.15) rotate(-5deg);
 }
 
-.add-card span {
-  font-size: 1.05rem;
+.menu-label {
+  font-size: 1.25rem;
   font-weight: 600;
-  color: #e65100;
-  letter-spacing: 0.5px;
-} 
-.men{
-    text-decoration: none;
-    color: #FF5E00;
-    font-weight: bold;
-    font-size: 25px;
+  color: #FF5E00;
+  text-align: center;
+  line-height: 1.4;
+  position: relative;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
-.cards-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 columns */
-    grid-template-rows: repeat(2, auto);   /* 2 rows */
-    gap: 30px;
-    padding: 40px;
-    justify-items: center;
+
+.add-card:hover .menu-label {
+  background: rgba(255, 94, 0, 0.1);
+}
+
+.imgDiv {
+  padding: 2rem 0;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.ico {
+  width: 150px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+@media (max-width: 768px) {
+  .cards-container {
+      grid-template-columns: 1fr;
+      padding: 1rem;
   }
   
-  .imgDiv{
-    display: flex;
-    justify-content: center;
-}
-.ico{
-    width: 200px;
-    height: auto;
+  h1 {
+      font-size: 2rem;
+  }
+  
+  .add-card {
+      height: 250px;
+  }
 }
