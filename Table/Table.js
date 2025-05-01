@@ -7,6 +7,14 @@ function toggleNav() {
   const navLinks = document.getElementById('navLinks');
   navLinks.classList.toggle('active');
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+      
+        document.getElementById("loader").style.display = "none";
+        document.querySelector(".container").style.display = "block";
+      }, 
+    );
+
 async function loadTables() {
     try {
       const response = await fetch('http://127.0.0.1:5000/get_tables');
