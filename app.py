@@ -132,6 +132,48 @@ def get_menu_items():
     except Exception as e:
         return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
 
+@app.route('/update_price', methods=['POST', 'OPTIONS'])
+def update_price():
+    if request.method == 'OPTIONS':
+        return '', 200  # Preflight request for CORS
+
+    try:
+        data = request.get_json()
+        item_id = data.get('ItemID')
+        new_price = data.get('Price')
+
+        if item_id is None or new_price is None:
+            return jsonify({"status": "fail", "message": "ItemID and Price are required"}), 400
+
+        cur = conn.cursor()
+        cur.execute("UPDATE Menu SET Price = %s WHERE ItemID = %s", (new_price, item_id))
+        conn.commit()
+        cur.close()
+
+        return jsonify({"status": "success", "message": f"Price updated for ItemID {item_id}"}), 200
+
+    except Exception as e:
+        return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
+
+@app.route('/delete_menu_item', methods=['POST'])
+def delete_menu_item():
+    try:
+        data = request.get_json()
+        item_id = data.get("id")
+
+        if item_id is None:
+            return jsonify({"status": "fail", "message": "Missing item ID"}), 400
+
+        cur = conn.cursor()
+        cur.execute("DELETE FROM Menu WHERE ItemID = %s", (item_id,))
+        conn.commit()
+        cur.close()
+
+        return jsonify({"status": "success", "message": f"Item #{item_id} deleted successfully"})
+
+    except Exception as e:
+        return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
+
 # -------------------- GET FEEDBACKS --------------------
 @app.route('/get_feedbacks', methods=['GET'])
 def get_feedbacks():
