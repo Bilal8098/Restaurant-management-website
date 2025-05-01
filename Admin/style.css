@@ -105,6 +105,9 @@ h1 {
   width: 400px;
   margin-left: 200px;
 }
+.img{
+  border-radius: 10px;
+}
 .menu-label {
   font-size: 1.25rem;
   font-weight: 600;
