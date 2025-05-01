@@ -78,6 +78,8 @@ const apiService = {
   },
   submitFeedback: async (userId, feedbackText) => {
     try {
+      console.log('Submitting feedback with:', { userId, feedbackText });
+      
       const response = await fetch('http://localhost:5000/add_feedback', {
         method: 'POST',
         headers: {
@@ -88,9 +90,13 @@ const apiService = {
           feedback: feedbackText
         })
       });
-      return await response.json();
+      
+      const data = await response.json();
+      console.log('Feedback submission response:', data);
+      return data;
+      
     } catch (error) {
-      console.error('Error submitting feedback:', error);
+      console.error('API Error:', error);
       return { status: 'error', message: 'Failed to submit feedback' };
     }
   }
