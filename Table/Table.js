@@ -1,12 +1,3 @@
-function toggleProfile() {
-  const box = document.getElementById('profileActions');
-  box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
-}
-
-function toggleNav() {
-  const navLinks = document.getElementById('navLinks');
-  navLinks.classList.toggle('active');
-}
 async function loadTables() {
     try {
       const response = await fetch('http://127.0.0.1:5000/get_tables');
@@ -80,6 +71,7 @@ const closeBtn = document.querySelector('.close');
 function openImagePreview(src) {
   modal.style.display = 'block';
   modalImg.src = src;
+  
 }
 
 closeBtn.onclick = function () {

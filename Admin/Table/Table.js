@@ -13,6 +13,13 @@ async function loadTables() {
       if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
       }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      
+        document.getElementById("loader").style.display = "none";
+        document.querySelector(".container").style.display = "block";
+      },  
+    );
 
       const data = await response.json();
       loadingSpinner.style.display = 'none';

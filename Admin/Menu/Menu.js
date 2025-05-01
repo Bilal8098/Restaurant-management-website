@@ -10,6 +10,13 @@ function showToast(message, isSuccess = true) {
   setTimeout(() => (toast.style.display = 'none'), 3000);
 }
 
+ document.addEventListener('DOMContentLoaded', () => {
+      
+        document.getElementById("loader").style.display = "none";
+        document.querySelector(".container").style.display = "block";
+      },  
+    );
+
 // Modal state
 let currentItemId = null;
 
