@@ -2,10 +2,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import psycopg2
 import base64
-from io import BytesIO
-from PIL import Image
-import io
-
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'secretKey123'
@@ -186,30 +185,72 @@ def add_feedback():
     except Exception as e:
         return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
 
-# -------------------- ADD FEEDBACKS --------------------
-# @app.route('/add_feedback', methods=['POST'])
-# def add_feedback():
-#     try:
-#         location = request.form.get('Location')
-#         number_of_seats = request.form.get('NumberOfSeats')
-#         status = request.form.get('Status', 'Available')
-#         image_data = request.form.get('Image')
+#---------------------Email sender-------------------------
+def send_confirmation_email(to_email, name, start_datetime, end_datetime):
+    from_email = "reddivel8098@gmail.com"
+    from_password = "hvcr dnym pfff olzs"
 
-#         if image_data:
-#             image_data = base64.b64decode(image_data)
+    msg = MIMEMultipart()
+    msg['From'] = from_email
+    msg['To'] = to_email
+    msg['Subject'] = 'Reservation Confirmation'
 
-#         cur = conn.cursor()
-#         cur.execute(
-#             "INSERT INTO Tables (Location, Image, NumberOfSeats, Status) VALUES (%s, %s, %s, %s)",
-#             (location, image_data, number_of_seats, status)
-#         )
-#         conn.commit()
-#         cur.close()
+    # HTML email body with styling
+    body = f"""
+    <html>
+      <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #F8F9FA;">
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+          <!-- Header -->
+          <div style="background: linear-gradient(135deg, #FF5E00, #FF8C42); padding: 30px; border-radius: 8px 8px 0 0; text-align: center;">
+            <h1 style="color: #FFFFFF; margin: 0; font-size: 24px;">Reservation Confirmed!</h1>
+          </div>
 
-#         return jsonify({"status": "success", "message": "Table added successfully"})
+          <!-- Content -->
+          <div style="background: #FFFFFF; padding: 30px; border-radius: 0 0 8px 8px; border: 1px solid #e0e0e0;">
+            <p style="color: #2A2A2A; font-size: 16px;">Hello {name},</p>
+            <p style="color: #2A2A2A; font-size: 16px;">Your reservation has been successfully made. Details below:</p>
 
-#     except Exception as e:
-#         return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
+            <div style="margin: 25px 0; padding: 20px; background-color: #F8F9FA; border-radius: 8px;">
+              <p style="color: #2A2A2A; margin: 10px 0; font-size: 15px;">
+                <span style="color: #FF3D00; font-weight: bold;">📅</span> Start: {start_datetime}
+              </p>
+              <p style="color: #2A2A2A; margin: 10px 0; font-size: 15px;">
+                <span style="color: #FF3D00; font-weight: bold;">📅</span> End: {end_datetime}
+              </p>
+              <p style="color: #2A2A2A; margin: 10px 0; font-size: 15px;">
+                <span style="color: #FF3D00; font-weight: bold;">📝</span> Status: 
+                <span style="background-color: #FF8C42; color: #FFFFFF; padding: 4px 8px; border-radius: 4px; font-size: 14px;">
+                  Pending
+                </span>
+              </p>
+            </div>
+
+            <p style="color: #2A2A2A; font-size: 16px; margin-top: 25px;">
+              Thank you for choosing our reservation service.<br>
+              We look forward to serving you!
+            </p>
+          </div>
+
+          <!-- Footer -->
+          <div style="text-align: center; padding: 20px; color: #2A2A2A; font-size: 12px;">
+            <p>This is an automated message - please do not reply directly</p>
+          </div>
+        </div>
+      </body>
+    </html>
+    """
+
+    msg.attach(MIMEText(body, 'html'))  # Changed to HTML
+
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(from_email, from_password)
+        server.send_message(msg)
+        server.quit()
+        print("Email is successfully sent!!")
+    except Exception as e:
+        print("Failed to send email:", str(e))
 
 @app.route('/reserve', methods=['POST'])
 def reserve():
@@ -238,7 +279,15 @@ def reserve():
 
     try:
         cur = conn.cursor()
-
+        email_query = "SELECT Email FROM Users WHERE UserID = %s"
+        cur.execute(email_query, (user_id,))
+        result = cur.fetchone()
+        if not result:
+            return jsonify({
+                'status': 'fail',
+                'message': 'User not found'
+            }), 404
+        email = result[0]
         # check for overlap
         check_sql = """
             SELECT 1
@@ -271,6 +320,7 @@ def reserve():
             name
         ))
         conn.commit()
+        send_confirmation_email(email, name, start_datetime, end_datetime)
         return jsonify({
             'status': 'success',
             'message': 'Reservation saved successfully'
@@ -290,8 +340,9 @@ def reserve():
 # -------------------- SIGN UP --------------------
 @app.route('/signup', methods=['POST'])
 def signup():
-    email = request.form.get('email')
-    password = request.form.get('password')
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
 
     # Check if the email is already in use
     cur = conn.cursor()
