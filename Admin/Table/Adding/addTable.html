@@ -4,36 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Table</title>
-    <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/x-icon">
-    <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/png">
-    <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="32x32">
-    <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="192x192">
+    <link rel="icon" href="../../assets/appIcon-noBackground.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="addTableStyle.css">
 </head>
 <body>
-<div class="imgDiv">
-    <img src="../../assets/appIcon-noBackground.png" alt="" class="ico">
-</div>
-<div class="h1Div">
-    <h1>
-        Add new table
-    </h1>
-</div>
-<div class="add">
-    <div class="uploadImage">
-        <img id="imagePreview" src="../../assets/addIcon.png" alt="Click to upload image" onclick="document.getElementById('imageInput').click()">
-        <input type="file" id="imageInput" style="display: none;" onchange="previewImage(event)">
+    <div class="particles" id="particles"></div>
+    <div class="floating-elements" id="floatingElements"></div>
+    
+    <div class="floating-island" id="floatingIsland">
+        <div class="logo-container">
+            <img src="../../../assets/appIcon-noBackground.png" alt="Logo" class="logo">
+        </div>
+        
+        <h1 class="title">Add New Table</h1>
+        
+        <div class="upload-container" onclick="document.getElementById('imageInput').click()">
+            <img id="imagePreview" src="../../../assets/addIcon.png" alt="Click to upload image">
+            <span class="upload-label">Upload Image</span>
+            <input type="file" id="imageInput" class="hidden" accept="image/*" onchange="previewImage(event)">
+        </div>
+        
+        <div class="form-fields">
+            <div class="input-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" placeholder="Where is the table located?">
+            </div>
+            
+            <div class="input-group">
+                <label for="seats">Number of Seats</label>
+                <input type="number" id="seats" placeholder="How many seats?">
+            </div>
+        </div>
+        
+        <button class="submit-btn" onclick="submitForm()">
+            <i class="fas fa-paper-plane"></i> Submit Table
+        </button>
     </div>
-</div>
-<div class="h1Div2">
-    <h1>Upload image</h1>
-</div>
-<div class="fields">
-    <input type="text" placeholder="Location">
-    <input type="number" placeholder="Number of seats">
-</div>
-<button onclick="submitForm()" class="butt">Submit</button>
-
-<script src="addTableScript.js"></script>
+    <script src="addTableScript.js">
+    </script>
 </body>
 </html>

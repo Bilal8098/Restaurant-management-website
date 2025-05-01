@@ -8,34 +8,30 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="imgDiv"  style="display: flex; justify-content: center;">
-            <img src="../assets/appIcon-noBackground.png" alt="" class="ico">
-        </div>
-        <div class="welc">
-            <h1>Admin Dashboard</h1>
-        </div>
-      </div>
-    </a>
-   <div style="display: flex;">
-    <a href="Menu/Menu.html" class="men">
-      <div class="menu-item">
-        <div class="add-card">
-          <img src="../assets/Menu.jpg" alt="Add" class="img"/>
-          <div class="menu-label">Menu</div>
-        </div>
-      </div>
+<div class="heading">
+  <img src="../assets/appIcon-noBackground.png" alt="" style="height: auto; width: 100px;">
+</div>
+<div class="heading">
+  <h1>
+    Admin dashboard
+  </h1>
+</div>
+</div>
+  <div class="cards-container">
+    <a href="Reservations/reservation.html" class="card reservation">
+      <img src="../assets/clock.png" alt="Reservations" class="img" />
+      <div class="menu-label">Reservations</div>
     </a>
   
-  <a href="Table/Tables.html" class="men">
-    <div class="menu-item">
-      <div class="add-card">
-        <img src="../assets/tables.jpeg" alt="Add" class="img"/>
-        <div class="menu-label">Tables</div>
-      </div>
-    </div>
-  </a>
-</div>
-   </div>
+    <a href="Menu/Menu.html" class="card menu">
+      <img src="../assets/Menu.jpg" alt="Menu" class="img" />
+      <div class="menu-label">Menu</div>
+    </a>
+  
+    <a href="Table/Tables.html" class="card tables">
+      <img src="../assets/tables.jpeg" alt="Tables" class="img" />
+      <div class="menu-label">Tables</div>
+    </a>
+  </div>  
 </body>
 </html>

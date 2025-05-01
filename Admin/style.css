@@ -9,41 +9,33 @@ body {
   box-sizing: border-box;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.welc {
-  text-align: center;
-  margin: 2rem 0;
-}
-
 h1 {
   color: white;
   font-size: 2.5rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.cards-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  padding: 2rem;
+.heading {
+  display: flex;
   justify-content: center;
 }
 
-.men {
+a {
   text-decoration: none;
-  transition: transform 0.3s ease;
 }
 
-.men:hover {
-  transform: translateY(-5px);
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  justify-content: center;
+  padding: 2rem;
+  grid-template-areas:
+    "reservation reservation"
+    "menu tables";
 }
 
-.add-card {
+.card {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -54,60 +46,40 @@ h1 {
   padding: 2rem;
   height: 300px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
-  width: 500px;
-  width: 100%; /* Changed from fixed 500px */
-  max-width: 400px; /* Added max-width */
-  margin: 0 auto;
 }
 
-.add-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transform: rotate(45deg);
-  transition: all 0.5s ease;
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
 }
 
-.add-card:hover::before {
-  animation: shine 1.5s;
+.card.reservation {
+  grid-area: reservation;
 }
 
-@keyframes shine {
-  0% { left: -50%; }
-  100% { left: 150%; }
+.card.menu {
+  grid-area: menu;
 }
 
-.add-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+.card.tables {
+  grid-area: tables;
 }
 
-.add-card img {
+.card img {
   width: 80px;
   height: 80px;
-  margin-bottom: 1.5rem;
   object-fit: contain;
-  filter: drop-shadow(0 4px 8px rgba(255, 94, 0, 0.2));
+  margin-bottom: 1.5rem;
+  border-radius: 10px;
   transition: transform 0.3s ease;
 }
 
-.add-card:hover img {
-  transform: scale(1.15) rotate(-5deg);
+.card:hover img {
+  transform: scale(1.1) rotate(-3deg);
 }
-.menu-item{
-  width: 400px;
-  margin-left: 200px;
-}
-.img{
-  border-radius: 10px;
-}
+
 .menu-label {
   font-size: 1.25rem;
   font-weight: 600;
@@ -120,13 +92,15 @@ h1 {
   transition: all 0.3s ease;
 }
 
-.add-card:hover .menu-label {
+.card:hover .menu-label {
   background: rgba(255, 94, 0, 0.1);
 }
 
 .imgDiv {
   padding: 2rem 0;
   animation: float 3s ease-in-out infinite;
+  display: flex;
+  justify-content: center;
 }
 
 @keyframes float {
@@ -141,15 +115,18 @@ h1 {
 
 @media (max-width: 768px) {
   .cards-container {
-      grid-template-columns: 1fr;
-      padding: 1rem;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "reservation"
+      "menu"
+      "tables";
   }
-  
+
+  .card {
+    height: 250px;
+  }
+
   h1 {
-      font-size: 2rem;
-  }
-  
-  .add-card {
-      height: 250px;
+    font-size: 2rem;
   }
 }
