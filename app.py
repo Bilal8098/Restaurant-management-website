@@ -218,10 +218,6 @@ def send_confirmation_email(to_email, name, start_datetime, end_datetime):
                 <span style="color: #FF3D00; font-weight: bold;">📅</span> End: {end_datetime}
               </p>
               <p style="color: #2A2A2A; margin: 10px 0; font-size: 15px;">
-                <span style="color: #FF3D00; font-weight: bold;">📝</span> Status: 
-                <span style="background-color: #FF8C42; color: #FFFFFF; padding: 4px 8px; border-radius: 4px; font-size: 14px;">
-                  Pending
-                </span>
               </p>
             </div>
 
@@ -248,7 +244,7 @@ def send_confirmation_email(to_email, name, start_datetime, end_datetime):
         server.login(from_email, from_password)
         server.send_message(msg)
         server.quit()
-        print("Email is successfully sent!!")
+        print(f"Email is successfully sent!! to: {to_email}")
     except Exception as e:
         print("Failed to send email:", str(e))
 
