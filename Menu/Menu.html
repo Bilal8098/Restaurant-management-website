@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk Menu</title>
   <link rel="stylesheet" href="Menu.css">
-  <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/x-icon">
-  <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/png">
-  <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="32x32">
-  <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="192x192">
-  <title>Menu</title>
-</head>
+  </head>
 <body>
-  <div class="container">
-    <img src="../assets/appIcon-noBackground.png" alt="Logo" class="header-icon" />
-    <h1>Menu</h1>
+<div class="hold">
+  <div class="img">  <img src="../assets/appIcon-noBackground.png" alt="" id="img">
+    <h1 id="disc">Discover our menu!</h1>
+  </div>
+</div>
+  <div id="loader" class="cyber-loader"></div>
+    <div class="container">
+        <div id="menu-grid" class="menu-grid"></div>
+    </div>
+    <canvas class="particles"></canvas>
 
-    <div class="scroll-wrapper">
-      <div class="menu-grid" id="menu-grid">
-        <!-- Menu items will be dynamically inserted here -->
-      </div>
-  <script src="Menu.js">
-
-  </script>
+    <script src="Menu.js">
+       
+    </script>
 </body>
 </html>
