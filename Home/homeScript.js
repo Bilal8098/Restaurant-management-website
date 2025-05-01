@@ -17,17 +17,13 @@ const state = {
 };
 
 
-  document.addEventListener('DOMContentLoaded', async () => {
-    try {
-      // Example: await loadMenuData();
-      // Example: await loadTableData();
-    } catch (error) {
-      console.error("Failed to load data:", error);
-    } finally {
-      document.getElementById('loader').style.display = 'none';
-      document.querySelector('.container').style.display = 'block';
-    }
-  })
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('loader').style.display = 'none';
+        document.querySelector('.container').style.display = 'block';
+      }, 
+    );
+
+  
 
 // Utility Functions
 const utils = {
