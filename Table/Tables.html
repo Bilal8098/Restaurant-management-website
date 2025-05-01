@@ -1,66 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tables</title>
-  <link rel="stylesheet" href="Tables.css" />
-  <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/x-icon">
-  <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/png">
-  <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="32x32">
-  <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="192x192">
+  <title>Tables - Neon Orange</title>
 </head>
-
+<link rel="stylesheet" href="Tables.css">
 <body>
+  <canvas class="particle-canvas"></canvas>
   <div class="container">
     <div class="header">
-      <div class="brand">Akalaty</div>
-      <div class="search-bar">
-        <input type="text" placeholder="Search..." />
-        <i class="fas fa-search"></i>
-      </div>
-
-
-        <div id="loader">
-        <div class="grid-loader">
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-        </div>
-      </div>
-      
-      
-      <ul class="ul">
-          <li><a href="../Menu/Menu.html">Menu</a></l>
-      </ul>
-      <div class="header-icons">
-        <i class="fas fa-check"></i>
-        <i class="fas fa-user" onclick="toggleProfile()"></i>
-      </div>
-      <div class="profile-actions" id="profileActions">
-        <button>Edit Profile</button>
-        <button>Logout</button>
-      </div>
-    </div> 
-    <h1>Table</h1>
-    <div id="image-modal" class="modal">
-      <span class="close">&times;</span>
-      <img class="modal-content" id="preview-img">
+      <h1>Tables</h1>
     </div>
-    <div class="tables" id="tables-container">
-      <!-- Table cards will be inserted here dynamically -->
-    </div>
+    <div class="tables" id="tables-container"></div>
   </div>
 
-  <script src="Table.js">
-  </script>
-</body>
+  <div id="image-modal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="preview-img">
+  </div>
 
+  <script src="Table.js"></script>
+</body>
 </html>
