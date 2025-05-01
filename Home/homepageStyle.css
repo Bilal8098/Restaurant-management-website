@@ -690,7 +690,9 @@ header {
   padding: 0.5rem 0.75rem;
   border-radius: 50px;
 }
-
+.section-title{
+  color: white;
+}
 .profile:hover {
   background: rgba(255, 94, 0, 0.1);
 }

@@ -1,46 +1,41 @@
-    // Handle form submission
-    document.querySelector('#signup-form').addEventListener('submit', function (e) {
-      e.preventDefault();
+document.getElementById("signup-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const confirmPassword = document.getElementById("confirm-password").value.trim();
 
-      const email = document.querySelector('input[name="email"]').value;
-      const password = document.querySelector('input[name="password"]').value;
-      const confirmPassword = document.querySelector('input[name="confirm-password"]').value;
+  if (password !== confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
 
-      if (password !== confirmPassword) {
-        alert("Passwords do not match.");
-        return;
-      }
-
-      fetch('http://127.0.0.1:5000/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === 'success') {
-          alert("Sign up successful! You can now log in.");
-          window.location.href = "Login.html";
-        } else {
-          alert(data.message);
-        }
-      })
-      .catch(err => {
-        alert("Error: " + err.message);
-      });
+  try {
+    const response = await fetch("http://127.0.0.1:5000/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, password })
     });
 
-    // Show/hide password toggles
-    const toggles = document.querySelectorAll('.toggle-password');
-    toggles.forEach(toggle => {
-      toggle.addEventListener('click', () => {
-        const input = toggle.previousElementSibling;
-        if (input.type === 'password') {
-          input.type = 'text';
-          toggle.classList.replace('fa-eye', 'fa-eye-slash');
-        } else {
-          input.type = 'password';
-          toggle.classList.replace('fa-eye-slash', 'fa-eye');
-        }
-      });
-    });
+    const result = await response.json();
+    if (result.status === "success") {
+      alert("Signup successful!");
+      window.location.href = "Login.html";
+    } else {
+      alert(result.message);
+    }
+  } catch (err) {
+    alert("Request failed: " + err.message);
+  }
+});
+
+// Toggle password visibility
+document.querySelectorAll('.toggle-password').forEach(icon => {
+  icon.addEventListener('click', () => {
+    const input = icon.previousElementSibling;
+    input.type = input.type === 'password' ? 'text' : 'password';
+    icon.classList.toggle('fa-eye');
+    icon.classList.toggle('fa-eye-slash');
+  });
+});

@@ -68,7 +68,6 @@ def add_table():
     try:
         location = request.form.get('Location')
         number_of_seats = request.form.get('NumberOfSeats')
-        status = request.form.get('Status', 'Available')
         image_data = request.form.get('Image')
 
         if image_data:
@@ -76,8 +75,8 @@ def add_table():
 
         cur = conn.cursor()
         cur.execute(
-            "INSERT INTO Tables (Location, Image, NumberOfSeats, Status) VALUES (%s, %s, %s, %s)",
-            (location, image_data, number_of_seats, status)
+            "INSERT INTO Tables (Location, Image, NumberOfSeats) VALUES (%s, %s, %s)",
+            (location, image_data, number_of_seats)
         )
         conn.commit()
         cur.close()
@@ -92,7 +91,7 @@ def add_table():
 def get_tables():
     try:
         cur = conn.cursor()
-        cur.execute("SELECT TableID, Location, Image, NumberOfSeats, Status FROM Tables")
+        cur.execute("SELECT TableID, Location, Image, NumberOfSeats FROM Tables")
         rows = cur.fetchall()
         cur.close()
 
@@ -103,7 +102,6 @@ def get_tables():
                 "Location": row[1],
                 "Image": base64.b64encode(row[2]).decode('utf-8') if row[2] else None,
                 "NumberOfSeats": row[3],
-                "Status": row[4]
             })
 
         return jsonify({"status": "success", "tables": tables})

@@ -78,6 +78,8 @@ const apiService = {
   },
   submitFeedback: async (userId, feedbackText) => {
     try {
+      console.log('Submitting feedback with:', { userId, feedbackText });
+      
       const response = await fetch('http://localhost:5000/add_feedback', {
         method: 'POST',
         headers: {
@@ -88,9 +90,13 @@ const apiService = {
           feedback: feedbackText
         })
       });
-      return await response.json();
+      
+      const data = await response.json();
+      console.log('Feedback submission response:', data);
+      return data;
+      
     } catch (error) {
-      console.error('Error submitting feedback:', error);
+      console.error('API Error:', error);
       return { status: 'error', message: 'Failed to submit feedback' };
     }
   }
@@ -190,27 +196,28 @@ const handlers = {
     console.log('Added item to cart:', itemId);
   },
   submitFeedback: async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault(); // This should be at the very top
     
     const feedbackText = elements.feedbackInput.value.trim();
     
     if (!feedbackText) {
-      alert('Please write your feedback before submitting.');
+      showToast('Please write your feedback before submitting.', 'error');
       return;
     }
     
     if (!state.currentUser) {
-      alert('Please log in to submit feedback.');
+      showToast('Please log in to submit feedback.', 'error');
       window.location.href = '../AuthFiles/Login.html';
       return;
     }
     
     try {
+      // Disable button during submission
       elements.sendBtn.disabled = true;
       elements.sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
       
       const response = await apiService.submitFeedback(
-        state.currentUser.id, 
+        state.currentUser, // Changed from state.currentUser.id
         feedbackText
       );
       
@@ -222,14 +229,16 @@ const handlers = {
         throw new Error(response.message || 'Failed to submit feedback');
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Feedback submission error:', error);
       showToast(error.message, 'error');
     } finally {
       elements.sendBtn.disabled = false;
       elements.sendBtn.innerHTML = 'Send <i class="fas fa-paper-plane"></i>';
     }
   }
-};document.addEventListener('click', (e) => {
+};
+
+document.addEventListener('click', (e) => {
   if (!e.target.closest('.profile') && elements.profileActions.classList.contains('active')) {
     elements.profileActions.classList.remove('active');
   }
