@@ -101,7 +101,10 @@ h1 {
 .add-card:hover img {
   transform: scale(1.15) rotate(-5deg);
 }
-
+.menu-item{
+  width: 400px;
+  margin-left: 200px;
+}
 .menu-label {
   font-size: 1.25rem;
   font-weight: 600;
