@@ -174,7 +174,8 @@ h1 {
     background-size: 1000px 100%;
 }
 .calendar-animation-wrapper {
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     position: relative;
 }
 

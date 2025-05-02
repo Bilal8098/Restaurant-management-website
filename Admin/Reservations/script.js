@@ -22,23 +22,24 @@
   
     async function fetchReservations(){
       try {
-        let r = await fetch('http://127.0.0.1:5000/reservations', { mode:'cors' });
+        let r = await fetch('http://127.0.0.1:5000/get_reservations', { mode:'cors' });
         let j = await r.json();
-        return (j.data||[]).map(r=>({
-          ReservationID: r.reservationid,
-          UserID:        r.userid,
-          TableID:       r.tableid,
-          startDate:     r.startdate,
-          endDate:       r.enddate,
+        return (j.reservations || []).map(r => ({
+          ReservationID: r.reservation_id,
+          UserID:        r.user_id,
+          TableID:       r.table_id,
+          startDate:     r.start_date,
+          endDate:       r.end_date,
           Name:          r.name,
-          PhoneNumber:   r.phonenumber,
+          PhoneNumber:   r.phone_number,
           Status:        r.status
         }));
       } catch(e){
-        console.error('fetchReservations',e);
+        console.error('fetchReservations', e);
         return [];
       }
     }
+    
   
     async function fetchTables(){
       try {
