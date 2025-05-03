@@ -27,11 +27,13 @@ const state = {
 
 // Utility Functions
 const utils = {
-  showLoader: (element) => {
-    element.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
+  showLoader: () => {
+    document.getElementById('loader').style.display = 'flex';
+    document.querySelector('.container').style.display = 'none';
   },
-  hideLoader: (element) => {
-    element.innerHTML = '';
+  hideLoader: () => {
+    document.getElementById('loader').style.display = 'none';
+    document.querySelector('.container').style.display = 'block';
   },
   showError: (element, message) => {
     element.innerHTML = `<div class="error-message">${message}</div>`;
@@ -264,9 +266,7 @@ function showToast(message, type = 'success') {
 }
 
 // Data Loading Functions
-async function loadMenuItems() {
-  utils.showLoader(elements.menuContainer);
-  
+async function loadMenuItems() {  
   const response = await apiService.fetchMenuItems();
   
   if (response.status === 'success') {
@@ -288,7 +288,6 @@ async function loadMenuItems() {
 }
 
 async function loadTables() {
-  utils.showLoader(elements.tablesContainer);
   
   const response = await apiService.fetchTables();
   
@@ -311,7 +310,6 @@ async function loadTables() {
 }
 
 async function loadFeedbacks() {
-  utils.showLoader(elements.feedbacksContainer);
   
   const response = await apiService.fetchFeedbacks();
   
@@ -326,6 +324,22 @@ async function loadFeedbacks() {
   }
 }
 
+async function loadAllData() {
+  utils.showLoader();
+  
+  try {
+    // Load all data in parallel
+    await Promise.all([
+      loadMenuItems(),
+      loadTables(),
+      loadFeedbacks()
+    ]);
+  } catch (error) {
+    console.error('Error loading data:', error);
+  } finally {
+    utils.hideLoader();
+  }
+}
 // Initialize App
 function init() {
   // Add event listeners
@@ -343,9 +357,7 @@ function init() {
   });
   
   // Load data
-  loadMenuItems();
-  loadTables();
-  loadFeedbacks();
+  loadAllData();
   updateProfileInfo();
 
   
