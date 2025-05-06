@@ -225,6 +225,33 @@ def add_feedback():
     except Exception as e:
         return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
 
+@app.route('/get_reservations', methods=['GET'])
+def get_reservations():
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM Reservations")
+        rows = cur.fetchall()
+
+        reservations = []
+        for row in rows:
+            reservation = {
+                "reservation_id": row[0],
+                "user_id": row[1],
+                "table_id": row[2],
+                "start_date": row[3],
+                "end_date": row[4],
+                "status": row[5],
+                "phone_number": row[6],
+                "name": row[7]
+            }
+            reservations.append(reservation)
+
+        cur.close()
+        return jsonify({"status": "success", "reservations": reservations})
+
+    except Exception as e:
+        return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
+
 #---------------------Email sender-------------------------
 def send_confirmation_email(to_email, name, start_datetime, end_datetime):
     from_email = "reddivel8098@gmail.com"

@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View reservaions</title>
-    <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/x-icon">
-    <link rel="icon" href="../assets/appIcon-noBackground.png" type="image/png">
-    <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="32x32">
-    <link rel="icon" href="../assets/appIcon-noBackground.png" sizes="192x192">
+    <link rel="icon" href="../../../assets/appIcon-noBackground.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
 </head><body>
     <h1>Table Reservations Calendar</h1>
@@ -27,6 +24,13 @@
         </div>
     </div>
     </div>
+    <div id="reservationModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Reservations for <span id="modalDate"></span></h2>
+        <div id="modalReservations"></div>
+    </div>
+</div>
     <script src="script.js"></script>
 </body>
 </html>

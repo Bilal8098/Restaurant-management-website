@@ -1,5 +1,25 @@
 const API_BASE = 'http://localhost:5000';
 
+// Password toggle functionality
+const setupPasswordToggles = () => {
+  const toggleOldPassword = document.getElementById('toggleOldPassword');
+  const oldPassword = document.getElementById('oldPassword');
+  const toggleNewPassword = document.getElementById('toggleNewPassword');
+  const newPassword = document.getElementById('newPassword');
+
+  toggleOldPassword.addEventListener('click', () => {
+    const type = oldPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+    oldPassword.setAttribute('type', type);
+    toggleOldPassword.innerHTML = type === 'password' ? '<i class="bi bi-eye"></i>' : '<i class="bi bi-eye-slash"></i>';
+  });
+
+  toggleNewPassword.addEventListener('click', () => {
+    const type = newPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+    newPassword.setAttribute('type', type);
+    toggleNewPassword.innerHTML = type === 'password' ? '<i class="bi bi-eye"></i>' : '<i class="bi bi-eye-slash"></i>';
+  });
+};
+
 window.onload = async () => {
   const userId = localStorage.getItem('userId');
   if (!userId) {
@@ -7,53 +27,66 @@ window.onload = async () => {
   }
   document.getElementById('userId').value = userId;
 
+  // Setup password toggles
+  setupPasswordToggles();
+
   // fetch profile
-  const resp = await fetch(`${API_BASE}/get_profile?user_id=${userId}`);
-  const json = await resp.json();
-  if (json.status === 'success') {
-    document.getElementById('email').value = json.profile.email;
-    document.getElementById('phone').value = json.profile.phone;
-  } else {
-    alert(json.message);
+  try {
+    const resp = await fetch(`${API_BASE}/get_profile?user_id=${userId}`);
+    const json = await resp.json();
+    
+    if (json.status === 'success') {
+      document.getElementById('email').value = json.profile.email;
+    } else {
+      showAlert('error', json.message || 'Failed to load profile data');
+    }
+  } catch (error) {
+    showAlert('error', 'Network error. Please try again.');
   }
 };
 
-// document.getElementById('profileForm').addEventListener('submit', async e => {
-//   e.preventDefault();
+// Form submission handler (uncomment when ready)
+document.getElementById('profileForm').addEventListener('submit', async e => {
+  e.preventDefault();
 
-//   const formData = new FormData();
-//   formData.append('user_id',    document.getElementById('userId').value);
-//   formData.append('email',      document.getElementById('email').value);
-//   formData.append('phone',      document.getElementById('phone').value);
-//   formData.append('oldPassword',document.getElementById('oldPassword').value);
-//   formData.append('newPassword',document.getElementById('newPassword').value);
+  const formData = new FormData();
+  formData.append('user_id', document.getElementById('userId').value);
+  formData.append('email', document.getElementById('email').value);
+  formData.append('oldPassword', document.getElementById('oldPassword').value);
+  formData.append('newPassword', document.getElementById('newPassword').value);
 
-//   const resp = await fetch(`${API_BASE}/update_profile`, {
-//     method: 'POST',
-//     body: formData
-//   });
-//   const json = await resp.json();
+  try {
+    const resp = await fetch(`${API_BASE}/update_profile`, {
+      method: 'POST',
+      body: formData
+    });
+    const json = await resp.json();
 
-//   if (json.status === 'success') {
-//     const msg = document.createElement('div');
-//     msg.innerText = 'Changes saved!';
-//     Object.assign(msg.style, {
-//       position: 'fixed',
-//       top: '50%',
-//       left: '50%',
-//       transform: 'translate(-50%, -50%)',
-//       backgroundColor: 'rgba(0,123,255,0.9)',
-//       color: '#fff',
-//       padding: '20px 40px',
-//       borderRadius: '8px',
-//       fontSize: '20px',
-//       textAlign: 'center',
-//       zIndex: '9999'
-//     });
-//     document.body.appendChild(msg);
+    if (json.status === 'success') {
+      showAlert('success', 'Changes saved successfully!');
+      setTimeout(() => window.location.href = 'ALASAYA.html', 1500);
+    } else {
+      showAlert('error', json.message || 'Failed to update profile');
+    }
+  } catch (error) {
+    showAlert('error', 'Network error. Please try again.');
+  }
+});
 
-//     setTimeout(() => window.location.href = 'ALASAYA.html', 1000);
-//   } else {
-//     alert(json.message);
-//   }
-// });
+// Improved alert/notification system
+function showAlert(type, message) {
+  const alertDiv = document.createElement('div');
+  alertDiv.innerHTML = `
+    <div class="alert-${type}">
+      <i class="bi ${type === 'success' ? 'bi-check-circle' : 'bi-exclamation-circle'}"></i>
+      ${message}
+    </div>
+  `;
+  
+  document.body.appendChild(alertDiv);
+  
+  setTimeout(() => {
+    alertDiv.style.opacity = '0';
+    setTimeout(() => alertDiv.remove(), 300);
+  }, 3000);
+}

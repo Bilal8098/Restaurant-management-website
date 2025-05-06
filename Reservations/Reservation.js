@@ -40,7 +40,6 @@ const data = {
     .then(res => res.json())
     .then(response => {
       alert(response.message);
-      // optional: redirect to another page after successful reservation
     })
     .catch(error => {
       alert("An error occurred while sending the request");

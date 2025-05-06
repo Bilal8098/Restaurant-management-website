@@ -1,57 +1,152 @@
-  /* full‐screen gradient background */
-  body {
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(135deg, #ff4e00, #f9a602, #ffcc99);
-  }
+/* Modern full-screen gradient background with smooth animation */
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #ff4e00, #f9a602, #ffcc99);
+  background-size: 300% 300%;
+  animation: gradientBG 15s ease infinite;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-  /* center & scroll container if needed */
-  .container {
-    min-height: 100vh;
-    padding: 20px;
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-    overflow-y: auto;
-  }
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
-  /* the white card with its own gradient */
+/* Center container with smooth transitions */
+.container {
+  min-height: 100vh;
+  padding: 20px;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+}
+
+/* Enhanced profile card with glass morphism effect */
+.profile-container {
+  width: 100%;
+  max-width: 450px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  color: #ff4e00;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Typography improvements */
+h2 {
+  color: #ff4e00;
+  font-weight: 600;
+  margin-bottom: 25px;
+  text-align: center;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(to right, #ff4e00, #f9a602);
+  border-radius: 3px;
+}
+
+/* Form elements styling */
+.form-label {
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #333 !important;
+  display: block;
+}
+
+.input-group-text {
+  background: #ff7e00;
+  color: #fff;
+  border: none;
+  border-radius: 8px 0 0 8px !important;
+  min-width: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-control {
+  border-radius: 8px !important;
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  transition: all 0.3s ease;
+  color: #333 !important;
+}
+
+.form-control:focus {
+  border-color: #ff7e00;
+  box-shadow: 0 0 0 0.25rem rgba(255, 126, 0, 0.25);
+}
+
+/* Button enhancements */
+.btn-primary {
+  background: linear-gradient(to right, #ff7e00, #ff4e00);
+  border: none;
+  font-size: 18px;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 126, 0, 0.3);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(to right, #ff4e00, #e65c00);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 126, 0, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Password input group styling */
+.password-input-group {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  z-index: 5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
   .profile-container {
-    width: 100%;
-    max-width: 400px;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    color: #ff4e00;
+    padding: 20px 15px;
+    margin: 0 10px;
   }
-
-  /* fixed‐size picture wrapper prevents overflow */
   
-  .form-label,
-  .input-group-text,
-  .form-control {
-    color: #333 !important;
+  h2 {
+    font-size: 1.5rem;
   }
-
-  .form-control {
-    border-radius: 8px;
-  }
-    
-  .btn-primary {
-    background: #ff7e00;
-    border: none;
-    font-size: 18px;
-    border-radius: 8px;
-    transition: background 0.3s ease;
-  }
-
-  .btn-primary:hover {
-    background: #e65c00;
-  }
-
-  .input-group-text {
-    background: #ff7e00;
-    color: #fff;
-    border-radius: 8px 0 0 8px;
-  }
+}
