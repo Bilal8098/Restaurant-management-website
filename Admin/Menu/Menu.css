@@ -284,7 +284,6 @@ h1 {
 
 /* Toast Notification */
 #toast {
-  display: none;
   position: fixed;
   bottom: 2rem;
   left: 50%;

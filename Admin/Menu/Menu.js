@@ -47,16 +47,26 @@
   window.addEventListener('DOMContentLoaded', fetchMenuItems);
 
   // Toast notification functions
-  function showToast(message, isSuccess = true) {
-    const toast = document.getElementById('toast');
+  function showToast(message, type = 'success') {
+    const toast = document.getElementById("toast");
+    toast.innerText = message;
+  
+    // Optional: Change color depending on type
+    if (type === 'error') {
+      toast.style.background = 'linear-gradient(to right, #e53935, #d32f2f)'; // red
+    } else {
+      toast.style.background = 'linear-gradient(to right, var(--primary), var(--accent))'; // default
+    }
+  
+    // Make it visible
     toast.style.display = 'block';
-    toast.textContent = message;
-    toast.style.background = isSuccess 
-      ? 'linear-gradient(to right, #27ae60, #2ecc71)'
-      : 'linear-gradient(to right, #e74c3c, #c0392b)';
-    setTimeout(() => (toast.style.display = 'none'), 3000);
+  
+    // Automatically hide after 3 seconds
+    setTimeout(() => {
+      toast.style.display = 'none';
+    }, 3000);
   }
-
+  
   document.addEventListener('DOMContentLoaded', () => {
     document.getElementById("loader").style.display = "none";
     document.querySelector(".scroll-wrapper").style.display = "block";

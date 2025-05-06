@@ -174,6 +174,26 @@ def delete_menu_item():
     except Exception as e:
         return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
 
+
+@app.route('/delete_table', methods=['POST'])
+def delete_table():
+    try:
+        data = request.get_json()
+        table_id = data.get("table_id")
+
+        if table_id is None:
+            return jsonify({"status": "fail", "message": "Missing table ID"}), 400
+
+        cur = conn.cursor()
+        cur.execute("DELETE FROM Tables WHERE TableID = %s", (table_id,))
+        conn.commit()
+        cur.close()
+
+        return jsonify({"status": "success", "message": f"Table #{table_id} deleted successfully"})
+
+    except Exception as e:
+        return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
+
 # -------------------- GET FEEDBACKS --------------------
 @app.route('/get_feedbacks', methods=['GET'])
 def get_feedbacks():
