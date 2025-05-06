@@ -36,8 +36,8 @@ To view the **Admin page**:
 ---
 
 ## 💡 Notes
-- Make sure any API calls in the HTML files are pointing to the correct `localhost` URL.
-- If you modify the Python code or HTML files, reload the pages in your browser to see the changes.
+- `Don't` modify the code or else the project won't behave as expected
+- Just `Clone` the repository and follow the instructions and you'll be ready to go!
 
 ---
 
