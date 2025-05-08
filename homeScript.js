@@ -115,7 +115,7 @@ const components = {
         <img src="data:image/png;base64,${item.Image}" 
              alt="${item.ItemName}" 
              loading="lazy"
-             onerror="this.src='../assets/fallback-image.png'" />
+             onerror="this.src='assets/fallback-image.png'" />
       </div>
       <div class="menu-content">
         <h3 class="menu-title">${item.ItemName}</h3>
@@ -178,20 +178,20 @@ const handlers = {
   handleLogout: () => {
     localStorage.removeItem('userId');
     localStorage.removeItem('userId');
-    window.location.href = "../AuthFiles/Login.html";
+    window.location.href = "AuthFiles/Login.html";
   },
   handleReserveTable: (tableId) => {
     if (!state.currentUser) {
       alert('Please log in to reserve a table.');
-      window.location.href = '../AuthFiles/Login.html';
+      window.location.href = 'AuthFiles/Login.html';
       return;
     }
-    window.location.href = `../Reservations/Reservation.html?tableId=${tableId}`;
+    window.location.href = `Reservations/Reservation.html?tableId=${tableId}`;
   },
   handleAddToCart: (itemId) => {
     if (!state.currentUser) {
       alert('Please log in to add items to cart.');
-      window.location.href = '../AuthFiles/Login.html';
+      window.location.href = 'AuthFiles/Login.html';
       return;
     }
     // Add to cart logic here
@@ -209,7 +209,7 @@ const handlers = {
     
     if (!state.currentUser) {
       showToast('Please log in to submit feedback.', 'error');
-      window.location.href = '../AuthFiles/Login.html';
+      window.location.href = 'AuthFiles/Login.html';
       return;
     }
     
@@ -346,7 +346,7 @@ function init() {
   elements.sendBtn.addEventListener('click', handlers.submitFeedback);
   elements.logoutBtn.addEventListener('click', handlers.handleLogout);
   elements.profileBtn.addEventListener('click', () => {
-    window.location.href = '../Profile/profile.html';
+    window.location.href = 'Profile/profile.html';
   });
   
   // Close profile dropdown when clicking outside
@@ -426,12 +426,12 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Profile button event listeners
   document.getElementById('prof').addEventListener('click', () => {
-    window.location.href = '../Profile/profile.html';
+    window.location.href = 'Profile/profile.html';
   });
   
   document.getElementById('logOut').addEventListener('click', () => {
     localStorage.removeItem('userId');
     localStorage.removeItem('userId');
-    window.location.href = "../AuthFiles/Login.html";
+    window.location.href = "AuthFiles/Login.html";
   });
 });
