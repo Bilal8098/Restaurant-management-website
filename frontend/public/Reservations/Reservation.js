@@ -32,7 +32,7 @@ const data = {
 };
 
 
-    fetch("http://localhost:5000/reserve", {
+    fetch("http://ample-miracle-production.up.railway.app/reserve", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)

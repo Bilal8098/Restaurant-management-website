@@ -111,7 +111,7 @@
             formData.append('Image', imageBase64);
 
             // Send the data to the Flask backend
-            fetch('http://localhost:5000/add_menu_item', {
+            fetch('http://ample-miracle-production.up.railway.app/add_menu_item', {
                 method: 'POST',
                 body: formData
             })

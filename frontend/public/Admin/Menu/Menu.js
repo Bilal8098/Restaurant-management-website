@@ -107,7 +107,7 @@
       return;
     }
 
-    fetch('http://localhost:5000/update_price', {
+    fetch('http://ample-miracle-production.up.railway.app/update_price', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -132,7 +132,7 @@
     const menuGrid = document.getElementById('menu-grid');
     menuGrid.innerHTML = '<div class="loading-spinner">Loading menu items...</div>';
 
-    fetch('http://localhost:5000/get_menu_items')
+    fetch('http://ample-miracle-production.up.railway.app/get_menu_items')
       .then(res => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
@@ -222,7 +222,7 @@
       btn.disabled = true;
     }
 
-    fetch('http://localhost:5000/delete_menu_item', {
+    fetch('http://ample-miracle-production.up.railway.app/delete_menu_item', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id })

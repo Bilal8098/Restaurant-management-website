@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function fetchMenuItems() {
-  fetch('http://localhost:5000/get_menu_items')
+fetch('https://ample-miracle-production.up.railway.app/get_menu_items')
       .then(response => response.json())
       .then(data => {
           if (data.status === "success") {
