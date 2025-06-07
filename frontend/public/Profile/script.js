@@ -1,4 +1,4 @@
-const API_BASE = 'http://ample-miracle-production.up.railway.app';
+const API_BASE = 'https://ample-miracle-production.up.railway.app';
 
 // Password toggle functionality
 const setupPasswordToggles = () => {

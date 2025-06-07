@@ -53,7 +53,7 @@ const utils = {
 const apiService = {
   fetchMenuItems: async () => {
     try {
-      const response = await fetch('https://ample-miracle-production.up.railway.app/get_menu_items');
+      const response = await fetch('httpss://ample-miracle-production.up.railway.app/get_menu_items');
       return await response.json();
     } catch (error) {
       console.error('Error fetching menu items:', error);
@@ -62,7 +62,7 @@ const apiService = {
   },
   fetchTables: async () => {
     try {
-      const response = await fetch('https://ample-miracle-production.up.railway.app/get_tables');
+      const response = await fetch('httpss://ample-miracle-production.up.railway.app/get_tables');
       return await response.json();
     } catch (error) {
       console.error('Error fetching tables:', error);
@@ -71,7 +71,7 @@ const apiService = {
   },
   fetchFeedbacks: async () => {
     try {
-      const response = await fetch('https://ample-miracle-production.up.railway.app/get_feedbacks');
+      const response = await fetch('httpss://ample-miracle-production.up.railway.app/get_feedbacks');
       return await response.json();
     } catch (error) {
       console.error('Error fetching feedbacks:', error);
@@ -82,7 +82,7 @@ const apiService = {
     try {
       console.log('Submitting feedback with:', { userId, feedbackText });
       
-      const response = await fetch('https://ample-miracle-production.up.railway.app/add_feedback', {
+      const response = await fetch('httpss://ample-miracle-production.up.railway.app/add_feedback', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -371,7 +371,7 @@ document.addEventListener('DOMContentLoaded', init);
 
 // Update user info in profile dropdown
 // Update the API_BASE to match your backend URL
-const API_BASE = 'http://ample-miracle-production.up.railway.app';
+const API_BASE = 'https://ample-miracle-production.up.railway.app';
 
 async function updateProfileInfo() {
   try {

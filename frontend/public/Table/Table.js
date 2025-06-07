@@ -63,7 +63,7 @@ new ParticleSystem();
 // Table Loading Function
 async function loadTables() {
   try {
-    const response = await fetch('https://ample-miracle-production.up.railway.app/get_tables');
+    const response = await fetch('httpss://ample-miracle-production.up.railway.app/get_tables');
     const data = await response.json();
 
     if (data.status === 'success') {

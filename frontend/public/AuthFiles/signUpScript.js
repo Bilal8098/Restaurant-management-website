@@ -10,7 +10,7 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
   }
 
   try {
-    const response = await fetch("http://ample-miracle-production.up.railway.app/signup", {
+    const response = await fetch("httpss://ample-miracle-production.up.railway.app/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

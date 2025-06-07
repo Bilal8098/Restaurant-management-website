@@ -182,7 +182,7 @@ function sendData(location, numberOfSeats, imageBase64) {
     submitBtn.disabled = true;
 
     // Send the data to the Flask backend
-    fetch('http://ample-miracle-production.up.railway.app/add_table', {
+    fetch('https://ample-miracle-production.up.railway.app/add_table', {
         method: 'POST',
         body: formData
     })
