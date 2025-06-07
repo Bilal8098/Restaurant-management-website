@@ -21,8 +21,7 @@ Run 'app.py' file to start the backend API
 
 To see the **customer-facing website**:
 
-1. Navigate to the `Home` folder:
-2. Open `homepage.html` in your browser.
+1.Open index.html file.
 
 ---
 
