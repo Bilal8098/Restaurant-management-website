@@ -3,7 +3,7 @@ document.querySelector('.butt').addEventListener('click', async e => {
     const email    = document.querySelector('.email').value;
     const password = document.querySelector('.password').value;
   
-    const res = await fetch('httpss://ample-miracle-production.up.railway.app/login', {
+    const res = await fetch('https://ample-miracle-production.up.railway.app/login', {
       method: 'POST',
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
