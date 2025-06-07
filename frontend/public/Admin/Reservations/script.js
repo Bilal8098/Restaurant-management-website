@@ -22,7 +22,7 @@ const refreshInterval = setInterval(loadCalendar, 5000);
 
 async function fetchReservations() {
     try {
-        let r = await fetch('http://127.0.0.1:5000/get_reservations', { mode: 'cors' });
+        let r = await fetch('http://ample-miracle-production.up.railway.app/get_reservations', { mode: 'cors' });
         let j = await r.json();
         return (j.reservations || []).map(r => ({
             ReservationID: r.reservation_id,
@@ -42,7 +42,7 @@ async function fetchReservations() {
 
 async function fetchTables() {
     try {
-        let r = await fetch('http://127.0.0.1:5000/get_tables', { mode: 'cors' });
+        let r = await fetch('http://ample-miracle-production.up.railway.app/get_tables', { mode: 'cors' });
         let j = await r.json();
         return (j.tables || []).map(t => ({ TableID: t.TableID }));
     } catch (e) {

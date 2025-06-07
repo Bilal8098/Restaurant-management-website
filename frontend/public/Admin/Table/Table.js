@@ -32,7 +32,7 @@ document.getElementById('confirm-delete').onclick = async function () {
   if (!tableToDelete) return;
 
   try {
-    const response = await fetch('http://127.0.0.1:5000/delete_table', {
+    const response = await fetch('http://ample-miracle-production.up.railway.app/delete_table', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ table_id: tableToDelete })
@@ -75,7 +75,7 @@ async function loadTables() {
     loadingSpinner.style.display = 'block';
     tablesContainer.innerHTML = '<div class="table-card skeleton"></div><div class="table-card skeleton"></div>';
 
-    const response = await fetch('http://127.0.0.1:5000/get_tables');
+    const response = await fetch('http://ample-miracle-production.up.railway.app/get_tables');
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
