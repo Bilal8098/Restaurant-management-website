@@ -14,7 +14,7 @@ document.querySelector('.butt').addEventListener('click', async e => {
       // save user_id for session
       localStorage.setItem('userId', data.user_id);
       // go to home
-      window.location.href = "../Home/homepage.html";
+      window.location.href = "../index.html";
     } else {
       alert(data.message);
     }
