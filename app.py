@@ -3,8 +3,9 @@ from flask_cors import CORS
 import psycopg2
 import base64
 import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+import os
+# from email.mime.text import MIMEText
+# from email.mime.multipart import MIMEMultipart
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'secretKey123'
@@ -273,7 +274,7 @@ def get_reservations():
         return jsonify({"status": "fail", "message": f"Error: {str(e)}"}), 500
 
 #---------------------Email sender-------------------------
-def send_confirmation_email(to_email, name, start_datetime, end_datetime):
+# def send_confirmation_email(to_email, name, start_datetime, end_datetime):
     from_email = "reddivel8098@gmail.com"
     from_password = "hvcr dnym pfff olzs"
 
@@ -403,7 +404,7 @@ def reserve():
             name
         ))
         conn.commit()
-        send_confirmation_email(email, name, start_datetime, end_datetime)
+        # send_confirmation_email(email, name, start_datetime, end_datetime)
         return jsonify({
             'status': 'success',
             'message': 'Reservation saved successfully'
@@ -488,4 +489,5 @@ def get_profile():
 
 # -------------------- MAIN --------------------
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
